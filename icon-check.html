@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Darul Ishaat — PWA Icon Check</title>
+<style>
+  :root{
+    --green:#065f1d;
+    --bg:#f4efe6;
+    --ink:#2a241c;
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    padding:32px 20px 80px;
+  }
+  h1{
+    font-size:1.4rem;
+    margin:0 0 4px;
+  }
+  p.sub{
+    margin:0 0 32px;
+    color:#6b6455;
+    font-size:0.92rem;
+  }
+  section{
+    margin-bottom:44px;
+  }
+  h2{
+    font-size:1rem;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+    color:#8a8171;
+    border-bottom:1px solid #ddd4c2;
+    padding-bottom:8px;
+    margin-bottom:20px;
+  }
+  .grid{
+    display:flex;
+    flex-wrap:wrap;
+    gap:24px;
+  }
+  .card{
+    background:#fff;
+    border:1px solid #e3dac9;
+    border-radius:12px;
+    padding:16px;
+    text-align:center;
+    min-width:120px;
+  }
+  .card img{
+    display:block;
+    margin:0 auto 10px;
+    background:#fff;
+    image-rendering:-webkit-optimize-contrast;
+  }
+  .card .label{
+    font-size:0.78rem;
+    font-weight:600;
+  }
+  .card .path{
+    font-size:0.68rem;
+    color:#9a9284;
+    word-break:break-all;
+  }
+
+  /* Real-world context mockups */
+  .mock-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:32px;
+    align-items:flex-start;
+  }
+  .mock{
+    background:#fff;
+    border:1px solid #e3dac9;
+    border-radius:12px;
+    padding:20px;
+    text-align:center;
+  }
+  .mock .caption{
+    margin-top:12px;
+    font-size:0.78rem;
+    color:#6b6455;
+  }
+
+  /* Home screen tile mock (rounded square, like Android/iOS) */
+  .home-tile{
+    width:76px;
+    height:76px;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 3px 10px rgba(0,0,0,0.18);
+  }
+  .home-tile img{ width:100%; height:100%; display:block; }
+
+  /* Browser tab mock */
+  .tab-mock{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:#dee1e6;
+    border-radius:8px 8px 0 0;
+    padding:8px 14px;
+    width:200px;
+  }
+  .tab-mock img{ width:16px; height:16px; }
+  .tab-mock span{
+    font-size:0.72rem;
+    color:#3c4043;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+  /* iOS home screen dark bg mock */
+  .ios-bg{
+    background:linear-gradient(#1c1c1e,#111112);
+    border-radius:16px;
+    padding:24px;
+  }
+  .ios-bg .home-tile{ border-radius:20px; }
+  .ios-bg .caption{ color:#c7c7cc; }
+
+  code{
+    background:#efe8d8;
+    padding:2px 6px;
+    border-radius:4px;
+    font-size:0.8rem;
+  }
+</style>
+</head>
+<body>
+
+  <h1>Darul Ishaat — PWA Icon Check</h1>
+  <p class="sub">All generated icon sizes from <code>icons/</code>, shown at true pixel size, plus mockups of where each shows up in real use. Open this file directly in a browser to inspect.</p>
+
+  <section>
+    <h2>Real-world contexts</h2>
+    <div class="mock-row">
+
+      <div class="mock">
+        <div class="home-tile">
+          <img src="icons/icon-192.png" alt="Home screen icon">
+        </div>
+        <div class="caption">Android home screen<br>(icon-192.png)</div>
+      </div>
+
+      <div class="mock ios-bg">
+        <div class="home-tile">
+          <img src="icons/apple-touch-icon.png" alt="iOS home screen icon">
+        </div>
+        <div class="caption">iOS home screen<br>(apple-touch-icon.png)</div>
+      </div>
+
+      <div class="mock">
+        <div class="tab-mock">
+          <img src="icons/favicon-16.png" alt="favicon">
+          <span>Darul Ishaat</span>
+        </div>
+        <div class="caption">Browser tab<br>(favicon-16.png)</div>
+      </div>
+
+      <div class="mock">
+        <div class="tab-mock">
+          <img src="icons/favicon-32.png" alt="favicon 32">
+          <span>Darul Ishaat</span>
+        </div>
+        <div class="caption">Bookmark bar<br>(favicon-32.png)</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <h2>All sizes — actual pixels</h2>
+    <div class="grid">
+      <div class="card"><img src="icons/favicon-16.png" width="16" height="16"><div class="label">16×16</div><div class="path">favicon-16.png</div></div>
+      <div class="card"><img src="icons/favicon-32.png" width="32" height="32"><div class="label">32×32</div><div class="path">favicon-32.png</div></div>
+      <div class="card"><img src="icons/icon-72.png" width="72" height="72"><div class="label">72×72</div><div class="path">icon-72.png</div></div>
+      <div class="card"><img src="icons/icon-96.png" width="96" height="96"><div class="label">96×96</div><div class="path">icon-96.png</div></div>
+      <div class="card"><img src="icons/icon-128.png" width="128" height="128"><div class="label">128×128</div><div class="path">icon-128.png</div></div>
+      <div class="card"><img src="icons/icon-144.png" width="144" height="144"><div class="label">144×144</div><div class="path">icon-144.png</div></div>
+      <div class="card"><img src="icons/icon-152.png" width="152" height="152"><div class="label">152×152</div><div class="path">icon-152.png</div></div>
+      <div class="card"><img src="icons/icon-180.png" width="180" height="180"><div class="label">180×180</div><div class="path">icon-180.png</div></div>
+      <div class="card"><img src="icons/apple-touch-icon.png" width="180" height="180"><div class="label">180×180</div><div class="path">apple-touch-icon.png</div></div>
+      <div class="card"><img src="icons/icon-192.png" width="192" height="192"><div class="label">192×192</div><div class="path">icon-192.png</div></div>
+      <div class="card"><img src="icons/icon-384.png" width="192" height="192"><div class="label">384×384<br><span style="font-weight:400">(shown at 192)</span></div><div class="path">icon-384.png</div></div>
+      <div class="card"><img src="icons/icon-512.png" width="192" height="192"><div class="label">512×512<br><span style="font-weight:400">(shown at 192)</span></div><div class="path">icon-512.png</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>On a dark background</h2>
+    <p class="sub" style="margin-bottom:16px;">Some launchers place icons on dark wallpaper — worth checking edges don't look odd.</p>
+    <div class="mock-row">
+      <div class="mock" style="background:#1c1c1e;">
+        <img src="icons/icon-192.png" width="96" height="96" style="border-radius:20px;">
+        <div class="caption" style="color:#c7c7cc;">icon-192.png</div>
+      </div>
+      <div class="mock" style="background:#ffffff;">
+        <img src="icons/icon-192.png" width="96" height="96" style="border-radius:20px; box-shadow:0 0 0 1px #eee;">
+        <div class="caption">icon-192.png (white bg)</div>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>
