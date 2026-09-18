@@ -4441,7 +4441,31 @@
     }
     scored.sort((a, b) => b.score - a.score);
 
-    return scored.slice(0, limit).map(s => s.book);
+    const result = scored.slice(0, limit).map(s => s.book);
+
+    // A cart split across categories (e.g. two Fiqh titles + one Seerah
+    // title) can otherwise lose the minority category entirely, since its
+    // items simply score lower and never crack the top N. Guarantee every
+    // category actually present in the cart gets at least one suggestion
+    // slot, when a real candidate for it exists, by swapping out the
+    // weakest pick from an over-represented category.
+    const presentCats = Object.keys(catWeight);
+    for(const cat of presentCats){
+      if(result.some(b => b.cat === cat)) continue;
+      const best = scored.find(s => s.book.cat === cat);
+      if(!best) continue;
+      let swapIdx = -1, swapScore = Infinity;
+      result.forEach((b, i) => {
+        if(result.filter(x => x.cat === b.cat).length > 1){
+          const s = scored.find(x => x.book.id === b.id)?.score ?? 0;
+          if(s < swapScore){ swapScore = s; swapIdx = i; }
+        }
+      });
+      if(swapIdx === -1) continue; // no safe swap without emptying a category entirely
+      result[swapIdx] = best.book;
+    }
+
+    return result;
   }
 
   function recommendationCardHTML(b){
