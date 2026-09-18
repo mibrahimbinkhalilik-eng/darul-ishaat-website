@@ -4723,6 +4723,12 @@
     activeFilter = btn.dataset.filter;
     filterRow.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
     btn.classList.add('active');
+    // Mirror the search->category reset below: picking a category chip
+    // should clear any leftover typed search text, so it doesn't stay
+    // applied invisibly and zero out the results for the new category.
+    if(catSearch.value.trim()){
+      catSearch.value = '';
+    }
     visibleCount = 6;
     renderCatalogue();
     trackEvent('select_content', {
