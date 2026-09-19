@@ -28,6 +28,14 @@ is found or something here gets fixed (move it to Resolved with the date).
 
 ## Resolved (recent)
 
+- [x] 2026-09-19 — Fixed stale images in the PWA/service worker: image
+  caching was cache-first-forever (never re-checked the network once a URL
+  was cached), so any future cover-photo swap at an existing path would
+  silently stay stale for returning visitors. Switched to
+  stale-while-revalidate and bumped the cache version to force a one-time
+  cleanup. This is the reason "Habib-ul-Fatawa" still looked like the old
+  cover after the swap — the catalogue was actually updated correctly, the
+  browser just never went back to check.
 - [x] 2026-09-19 — Improved accent/name-variant matching (search + voice):
   added single-vowel (e/i, o/u) and v/w interchange to normalization.
   Now matches Muhammad/Mohammad, Yunus/Younus, Gangohi/Ganguhi, Ehsanullah/
