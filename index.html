@@ -4578,6 +4578,10 @@
     document.getElementById('cartDrawer').classList.add('open');
     document.getElementById('cartOverlay').classList.add('open');
     document.body.classList.add('cart-open');
+    trackEvent('view_cart', {
+      item_count: cartCount(),
+      distinct_titles: Object.keys(cart).length
+    });
   }
   function closeCart(){
     document.getElementById('cartDrawer').classList.remove('open');
