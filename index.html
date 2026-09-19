@@ -4914,17 +4914,28 @@
     };
     const CATEGORY_KEYWORDS = {
       'quran':"Qur'an & Tafseer", "qur'an":"Qur'an & Tafseer", 'tafseer':"Qur'an & Tafseer", 'tafsir':"Qur'an & Tafseer",
-      'hadith':'Hadith & Sunnah', 'sunnah':'Hadith & Sunnah',
+      'hadith':'Hadith & Sunnah', 'hadees':'Hadith & Sunnah', 'sunnah':'Hadith & Sunnah',
       'fiqh':'Fiqh & Fatawa', 'fatawa':'Fiqh & Fatawa',
       'seerah':'Seerah & History', 'seerat':'Seerah & History', 'history':'Seerah & History',
       'tasawwuf':'Tasawwuf & Spirituality', 'sufi':'Tasawwuf & Spirituality', 'spirituality':'Tasawwuf & Spirituality',
       'family':'Family & Everyday Guidance',
-      'arabic':'Dictionaries / Grammar & Language Studies', 'urdu':'Dictionaries / Grammar & Language Studies', 'language':'Dictionaries / Grammar & Language Studies', 'grammar':'Dictionaries / Grammar & Language Studies', 'nahw':'Dictionaries / Grammar & Language Studies', 'balagha':'Dictionaries / Grammar & Language Studies',
-      'dictionary':'Dictionaries & Lexicons', 'dictionaries':'Dictionaries & Lexicons', 'lexicon':'Dictionaries & Lexicons', 'lexicons':'Dictionaries & Lexicons',
-      'namaz':'Namaz, Dua & Wazaif', 'salah':'Namaz, Dua & Wazaif', 'salat':'Namaz, Dua & Wazaif', 'dua':'Namaz, Dua & Wazaif', 'duas':'Namaz, Dua & Wazaif', 'wazaif':'Namaz, Dua & Wazaif', 'wazaaif':'Namaz, Dua & Wazaif', 'prayer':'Namaz, Dua & Wazaif', 'prayers':'Namaz, Dua & Wazaif',
+      // Multi-word phrases checked before the single-word entries further
+      // down (Object.keys().find() below returns the FIRST key that
+      // matches, so insertion order picks the winner): "arabic books"/
+      // "english books" mean the language-only tabs, while bare "arabic"
+      // still falls through to the Arabic tab too (no plainer alternative
+      // meaning left once 'grammar'/'nahw'/'balagha' below already claim
+      // the language-study-books intent) and bare "english" to its tab.
+      'arabic books':'__arabic__', 'arabic only':'__arabic__',
+      'english books':'__english__', 'english only':'__english__',
+      'multi volume':'__sets__', 'multi-volume':'__sets__', 'volume sets':'__sets__',
+      'grammar':'Dictionaries / Grammar & Language Studies', 'nahw':'Dictionaries / Grammar & Language Studies', 'balagha':'Dictionaries / Grammar & Language Studies',
+      'dictionary':'Dictionaries / Grammar & Language Studies', 'dictionaries':'Dictionaries / Grammar & Language Studies', 'lexicon':'Dictionaries / Grammar & Language Studies', 'lexicons':'Dictionaries / Grammar & Language Studies',
+      'namaz':'Namaz, Dua & Wazaif', 'namaaz':'Namaz, Dua & Wazaif', 'salah':'Namaz, Dua & Wazaif', 'salat':'Namaz, Dua & Wazaif', 'dua':'Namaz, Dua & Wazaif', 'duas':'Namaz, Dua & Wazaif', 'wazaif':'Namaz, Dua & Wazaif', 'wazaaif':'Namaz, Dua & Wazaif', 'prayer':'Namaz, Dua & Wazaif', 'prayers':'Namaz, Dua & Wazaif',
       'women':'Women', 'woman':'Women', 'ladies':'Women',
       'khutbaat':'Khutbaat', 'khutbat':'Khutbaat', 'khutba':'Khutbaat', 'khutbah':'Khutbaat', 'sermons':'Khutbaat',
-      'qiyamah':'Signs of Qiyamah', 'qiyamat':'Signs of Qiyamah', 'signs':'Signs of Qiyamah', 'hereafter':'Signs of Qiyamah', 'akhirah':'Signs of Qiyamah'
+      'qiyamah':'Signs of Qiyamah', 'qiyamat':'Signs of Qiyamah', 'signs':'Signs of Qiyamah', 'hereafter':'Signs of Qiyamah', 'akhirah':'Signs of Qiyamah',
+      'arabic':'__arabic__', 'english':'__english__', 'sets':'__sets__'
     };
 
     function applyFilter(catName){
@@ -4971,7 +4982,15 @@
       const catKey = Object.keys(CATEGORY_KEYWORDS).find(k => t.includes(k));
       if(catKey){
         const escapedKey = catKey.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        const leftover = query.replace(new RegExp('\\b' + escapedKey + '\\b', 'gi'), '').trim();
+        // Strip the matched key out of the RAW transcript first, then strip
+        // filler words from what's left — not the other way around. Doing
+        // it the other way (as before) broke multi-word keys like "arabic
+        // books": "books" is itself a filler word, so by the time `query`
+        // existed the phrase "arabic books" no longer appeared in it intact
+        // and the leftover check always failed for phrase-style keys.
+        const leftover = t.replace(new RegExp('\\b' + escapedKey + '\\b', 'gi'), '')
+          .replace(/\b(?:search for|find|look for|show me|navigate to|go to|show|open|category|categories|section|sections|books?|please|in|the)\b/gi, '')
+          .trim();
         if(!leftover){
           applyFilter(CATEGORY_KEYWORDS[catKey]);
           catSearch.value = '';
