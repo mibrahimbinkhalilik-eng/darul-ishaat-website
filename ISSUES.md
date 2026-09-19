@@ -28,6 +28,13 @@ is found or something here gets fixed (move it to Resolved with the date).
 
 ## Resolved (recent)
 
+- [x] 2026-09-19 — Improved accent/name-variant matching (search + voice):
+  added single-vowel (e/i, o/u) and v/w interchange to normalization.
+  Now matches Muhammad/Mohammad, Yunus/Younus, Gangohi/Ganguhi, Ehsanullah/
+  Ihsanullah, and the very common Deobandi-scholar "-wi/-vi" name suffix
+  (Thanvi/Thanwi, Nadwi/Nadvi, Kandhlawi/Kandhlavi, Seoharwi/Seoharvi).
+  Verified against the full catalogue before shipping — no false-positive
+  merges of unrelated words.
 - [x] 2026-09-19 — Fixed voice search: "dictionary"/"lexicon" voice commands
   pointed to a category name that no longer exists (silently returned 0
   results); added missing voice routes for English Books, Arabic Books,
