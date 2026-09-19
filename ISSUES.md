@@ -28,6 +28,12 @@ is found or something here gets fixed (move it to Resolved with the date).
 
 ## Resolved (recent)
 
+- [x] 2026-09-19 — Fixed voice search: "dictionary"/"lexicon" voice commands
+  pointed to a category name that no longer exists (silently returned 0
+  results); added missing voice routes for English Books, Arabic Books,
+  and Sets tabs; added "hadees"/"namaaz" spelling variants; fixed a
+  leftover-text bug that would've broken multi-word voice phrases like
+  "arabic books".
 - [x] 2026-09-19 — Cart/reading-list drawer open now fires `view_cart`
   (completes the open → checkout/abandon funnel).
 - [x] 2026-09-19 — Umami Domain field updated from stale Netlify URL to
