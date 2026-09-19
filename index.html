@@ -327,6 +327,35 @@
     display:none;
   }
 
+  /* Subtle Islamic geometric motif (interlocking square + diamond, the
+     classic basis of most star tessellations) tiled at very low opacity
+     in the site's existing brass/gold tone, so it reads as texture rather
+     than decoration competing with the content on top of it. */
+  .hero{
+    background-color:var(--paper);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cg fill='none' stroke='%23a9853a' stroke-opacity='0.16' stroke-width='1'%3E%3Crect x='10' y='10' width='40' height='40'/%3E%3Cpath d='M30 4 L56 30 L30 56 L4 30 Z'/%3E%3C/g%3E%3C/svg%3E");
+    background-size:60px 60px;
+  }
+
+  /* Soft "Noor" (light) glow: a warm, static radial gradient — deliberately
+     NOT an infinite animation, since that pattern (once applied per-card
+     across the catalogue grid) was a confirmed real performance regression
+     earlier in this project. This is a single glow per section, cheap. */
+  .noor-glow{
+    position:relative;
+  }
+  .noor-glow::before{
+    content:'';
+    position:absolute;
+    top:0; left:50%;
+    width:min(900px, 140%);
+    height:520px;
+    transform:translate(-50%, -18%);
+    background:radial-gradient(ellipse at center, rgba(201,169,104,0.30) 0%, rgba(201,169,104,0.14) 32%, rgba(201,169,104,0) 68%);
+    pointer-events:none;
+    z-index:0;
+  }
+
   .floating-titles{
     position:absolute;
     inset:0;
@@ -2738,7 +2767,7 @@
 <main id="top">
 
   <div class="hero-about-wrap">
-  <section class="hero" style="position:relative;">
+  <section class="hero noor-glow" style="position:relative;">
     <div class="floating-titles" id="floatingTitles" aria-hidden="true"></div>
     <div class="wrap">
       <div style="text-align:center; margin-bottom:18px; animation:fadeInUp 0.9s ease-out 0.15s backwards;">
@@ -2881,8 +2910,8 @@
     </div>
   </section>
 
-  <section id="founders" style="padding:60px 0; background:white; border-bottom:1px solid var(--line);">
-    <div style="max-width:1200px; margin:0 auto; padding:0 24px;">
+  <section id="founders" class="noor-glow" style="padding:60px 0; overflow:hidden; background-color:white; background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cg fill='none' stroke='%23a9853a' stroke-opacity='0.14' stroke-width='1'%3E%3Crect x='10' y='10' width='40' height='40'/%3E%3Cpath d='M30 4 L56 30 L30 56 L4 30 Z'/%3E%3C/g%3E%3C/svg%3E&quot;); background-size:60px 60px; border-bottom:1px solid var(--line);">
+    <div style="max-width:1200px; margin:0 auto; padding:0 24px; position:relative; z-index:1;">
       <h2 class="section-title">Our Founder & Legacy</h2>
 
       <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:32px; margin-top:60px;">
