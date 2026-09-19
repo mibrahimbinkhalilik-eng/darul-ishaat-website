@@ -3978,6 +3978,22 @@
       .replace(/ee/g, 'i')
       .replace(/oo/g, 'u')
       .replace(/aa/g, 'a')
+      // Single short-vowel interchange: Urdu/Arabic names get transliterated
+      // with inconsistent vowels depending on accent/convention — Muhammad
+      // vs Mohammad, Yunus vs Younus, Gangohi vs Ganguhi, Nomani vs Numani,
+      // Ilahi vs Elahi. The double-vowel rules above already unify the
+      // "long vowel" spelling convention (Kareem/Karim); this catches the
+      // separate short-vowel convention on top of that. Verified against
+      // the full catalogue before shipping: only merges genuine spelling
+      // variants, no run of unrelated words collapsing together.
+      .replace(/e/g, 'i')
+      .replace(/o/g, 'u')
+      // v/w interchange: extremely common in scholar-name suffixes across
+      // this catalogue's transliteration conventions — Thanvi/Thanwi,
+      // Nadwi/Nadvi, Kandhlawi/Kandhlavi, Seoharwi/Seoharvi, Nanotvi/
+      // Nanotwi. Also verified against the full catalogue: no unrelated
+      // words merge because of it.
+      .replace(/v/g, 'w')
       .replace(/(.)\1+/g, '$1'); // collapse doubled letters (Mohammed -> Mohamed)
     // Drop standalone voice filler words, but only if something else is
     // left — a query that's nothing but filler shouldn't collapse to an
