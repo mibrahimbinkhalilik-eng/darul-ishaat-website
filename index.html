@@ -327,14 +327,11 @@
     display:none;
   }
 
-  /* Subtle Islamic geometric motif (interlocking square + diamond, the
-     classic basis of most star tessellations) tiled at very low opacity
-     in the site's existing brass/gold tone, so it reads as texture rather
-     than decoration competing with the content on top of it. */
+  /* Subtle Islamic geometric motif — removed per feedback, kept the rule
+     as a no-op background-image:none so the .hero background-color line
+     below still applies without needing to touch unrelated properties. */
   .hero{
     background-color:var(--paper);
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cg fill='none' stroke='%23a9853a' stroke-opacity='0.16' stroke-width='1'%3E%3Crect x='10' y='10' width='40' height='40'/%3E%3Cpath d='M30 4 L56 30 L30 56 L4 30 Z'/%3E%3C/g%3E%3C/svg%3E");
-    background-size:60px 60px;
   }
 
   /* Soft "Noor" (light) glow: a warm, static radial gradient — deliberately
@@ -2910,7 +2907,7 @@
     </div>
   </section>
 
-  <section id="founders" class="noor-glow" style="padding:60px 0; overflow:hidden; background-color:white; background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cg fill='none' stroke='%23a9853a' stroke-opacity='0.14' stroke-width='1'%3E%3Crect x='10' y='10' width='40' height='40'/%3E%3Cpath d='M30 4 L56 30 L30 56 L4 30 Z'/%3E%3C/g%3E%3C/svg%3E&quot;); background-size:60px 60px; border-bottom:1px solid var(--line);">
+  <section id="founders" class="noor-glow" style="padding:60px 0; overflow:hidden; background-color:white; border-bottom:1px solid var(--line);">
     <div style="max-width:1200px; margin:0 auto; padding:0 24px; position:relative; z-index:1;">
       <h2 class="section-title">Our Founder & Legacy</h2>
 
