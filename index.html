@@ -4040,7 +4040,7 @@
   function matchesActiveFilter(b){
     if(activeFilter === 'all') return true;
     if(activeFilter === '__english__') return b.meta.includes('English');
-    if(activeFilter === '__arabic__') return b.meta.includes('Arabic');
+    if(activeFilter === '__arabic__') return b.meta.includes('Arabic') && !b.meta.includes('Urdu');
     if(activeFilter === '__sets__') return /\b([2-9]|\d{2,})\s+volumes\b/i.test(b.meta);
     if(activeFilter === '__shuruhat__') return /\bsharh\b/i.test(b.title) || /شرح/.test(b.urdu);
     if(activeFilter === '__hajjramadan__') return /\b(hajj|umrah|umra|ziyarat|ramadan|ramzan|fasting|zakat|zakaat|zakah|zakaah)\b/i.test(b.title + ' ' + b.meta) || /\broza\b(?!-)/i.test(b.title + ' ' + b.meta) || /(?<![\u0600-\u06FF])(حج|عمرہ|زیارت|رمضان|روزہ|روزے|زکوٰۃ|زکات|زکاۃ|زکوة)(?![\u0600-\u06FF])/.test(b.urdu);
