@@ -334,23 +334,11 @@
     background-color:var(--paper);
   }
 
-  /* Soft "Noor" (light) glow: a warm, static radial gradient — deliberately
-     NOT an infinite animation, since that pattern (once applied per-card
-     across the catalogue grid) was a confirmed real performance regression
-     earlier in this project. This is a single glow per section, cheap. */
-  .noor-glow{
-    position:relative;
-  }
+  /* Noor-glow removed per feedback (rendered with an unwanted pink tint
+     in practice) — rule kept as a documented no-op so .noor-glow class
+     references elsewhere don't need to be cleaned up individually. */
   .noor-glow::before{
-    content:'';
-    position:absolute;
-    top:0; left:50%;
-    width:min(900px, 140%);
-    height:520px;
-    transform:translate(-50%, -18%);
-    background:radial-gradient(ellipse at center, rgba(201,169,104,0.30) 0%, rgba(201,169,104,0.14) 32%, rgba(201,169,104,0) 68%);
-    pointer-events:none;
-    z-index:0;
+    content:none;
   }
 
   .floating-titles{
