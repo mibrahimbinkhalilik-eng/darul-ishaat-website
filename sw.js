@@ -36,9 +36,13 @@ self.addEventListener("fetch", (event) => {
 
   if (isNavigation || !isStaticAsset) {
     // Network-first: HTML, JS, CSS, manifest — always get the latest deploy.
-    // Falls back to cache only when offline.
+    // cache:'no-store' bypasses the browser's own HTTP cache (a separate
+    // layer underneath fetch(), outside the Service Worker's Cache API) —
+    // without it, a long Cache-Control max-age from the host could still
+    // quietly serve a stale response here even though this code is
+    // "network-first" in intent. Falls back to the SW cache only offline.
     event.respondWith(
-      fetch(req)
+      fetch(req, { cache: 'no-store' })
         .then((response) => {
           const copy = response.clone();
           caches.open(CACHE_NAME).then((cache) => cache.put(req, copy));
@@ -49,19 +53,20 @@ self.addEventListener("fetch", (event) => {
   } else {
     // Stale-while-revalidate: images, fonts, icons. Serve the cached copy
     // immediately for a fast repeat load, but ALWAYS also fetch a fresh
-    // copy in the background and overwrite the cache entry with it. Plain
-    // cache-first (the old strategy) never re-checked the network once an
-    // image was cached, so re-uploading a fresh cover photo to the same
-    // path (e.g. images/book-367.jpg, the normal way this catalogue's
-    // photo-swap workflow works) could stay stale in a returning visitor's
-    // cache indefinitely, with no way for it to self-correct. This still
-    // shows the cached image on THIS load, but the swap is picked up
+    // copy in the background (bypassing HTTP cache too, same reasoning as
+    // above) and overwrite the cache entry with it. Plain cache-first (the
+    // old strategy) never re-checked the network once an image was
+    // cached, so re-uploading a fresh cover photo to the same path (e.g.
+    // images/book-367.jpg, the normal way this catalogue's photo-swap
+    // workflow works) could stay stale in a returning visitor's cache
+    // indefinitely, with no way for it to self-correct. This still shows
+    // the cached image on THIS load, but the swap is picked up
     // automatically by the NEXT load instead of requiring the visitor to
     // clear the app's storage.
     event.respondWith(
       caches.open(CACHE_NAME).then((cache) =>
         cache.match(req).then((cached) => {
-          const network = fetch(req).then((response) => {
+          const network = fetch(req, { cache: 'no-store' }).then((response) => {
             if (response && response.ok) cache.put(req, response.clone());
             return response;
           }).catch(() => cached);

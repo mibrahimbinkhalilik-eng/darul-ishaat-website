@@ -5678,7 +5678,7 @@
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js').then((reg) => {
+      navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then((reg) => {
         trackEvent('pwa_sw_registered');
         // Check for a new deploy every time the page loads...
         reg.update().catch(() => {});
