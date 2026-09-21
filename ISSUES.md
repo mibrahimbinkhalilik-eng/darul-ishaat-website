@@ -28,6 +28,14 @@ is found or something here gets fixed (move it to Resolved with the date).
 
 ## Resolved (recent)
 
+- [x] 2026-09-20 — Hardened auto-update against HTTP-level caching: added
+  `cache:'no-store'` to every fetch inside the service worker and
+  `updateViaCache:'none'` on registration, so a Cache-Control header from
+  the host can never quietly serve a stale response underneath the
+  already-correct network-first logic.
+- [x] 2026-09-20 — Install-app banner now nags every visit (sessionStorage,
+  not a 14-day localStorage cooldown) until the customer installs.
+
 - [x] 2026-09-19 — Fixed stale images in the PWA/service worker: image
   caching was cache-first-forever (never re-checked the network once a URL
   was cached), so any future cover-photo swap at an existing path would
