@@ -3939,7 +3939,9 @@
     + '<button class="filter-chip" data-filter="__hajjramadan__">Hajj/Umrah & Ramadan/Roza/Zakat</button>'
     + (categories.includes('Seerah & History') ? '' : qissasChip)
     + '<button class="filter-chip" data-filter="__english__">English Books</button>'
-    + '<button class="filter-chip" data-filter="__arabic__">Arabic Books</button>';
+    + '<button class="filter-chip" data-filter="__arabic__">Arabic Books</button>'
+    + '<button class="filter-chip" data-filter="__twocolor__">2-Color Printing</button>'
+    + '<button class="filter-chip" data-filter="__fourcolor__">4-Color Printing</button>';
 
   // Normalizes text for search so common English transliteration spelling
   // variants of Urdu/Arabic names and titles all match each other —
@@ -4072,6 +4074,8 @@
     if(activeFilter === '__english__') return b.meta.includes('English');
     if(activeFilter === '__arabic__') return b.meta.includes('Arabic') && !b.meta.includes('Urdu') && !b.meta.includes('English');
     if(activeFilter === '__sets__') return /\b([2-9]|\d{2,})\s+volumes\b/i.test(b.meta);
+    if(activeFilter === '__twocolor__') return !!b.twoColor;
+    if(activeFilter === '__fourcolor__') return !!b.fourColor;
     if(activeFilter === '__shuruhat__') return /\bsharh\b/i.test(b.title) || /شرح/.test(b.urdu);
     if(activeFilter === '__hajjramadan__') return /\b(hajj|umrah|umra|ziyarat|ramadan|ramzan|fasting|zakat|zakaat|zakah|zakaah)\b/i.test(b.title + ' ' + b.meta) || /\broza\b(?!-)/i.test(b.title + ' ' + b.meta) || /(?<![\u0600-\u06FF])(حج|عمرہ|زیارت|رمضان|روزہ|روزے|زکوٰۃ|زکات|زکاۃ|زکوة)(?![\u0600-\u06FF])/.test(b.urdu);
     if(activeFilter === '__qissas__') return /\b(qissas|qisas|stories|story|kahani|kahaniyan)\b/i.test(b.title + ' ' + b.meta) || /(?<![\u0600-\u06FF])(قصص|کہانی|کہانیاں)(?![\u0600-\u06FF])/.test(b.urdu);
@@ -4989,6 +4993,8 @@
       'arabic books':'__arabic__', 'arabic only':'__arabic__',
       'english books':'__english__', 'english only':'__english__',
       'multi volume':'__sets__', 'multi-volume':'__sets__', 'volume sets':'__sets__',
+      'two color':'__twocolor__', 'two colour':'__twocolor__', '2 color':'__twocolor__', '2 colour':'__twocolor__', 'dorangah':'__twocolor__',
+      'four color':'__fourcolor__', 'four colour':'__fourcolor__', '4 color':'__fourcolor__', '4 colour':'__fourcolor__', 'full color':'__fourcolor__', 'full colour':'__fourcolor__',
       'grammar':'Dictionaries / Grammar & Language Studies', 'nahw':'Dictionaries / Grammar & Language Studies', 'balagha':'Dictionaries / Grammar & Language Studies',
       'dictionary':'Dictionaries / Grammar & Language Studies', 'dictionaries':'Dictionaries / Grammar & Language Studies', 'lexicon':'Dictionaries / Grammar & Language Studies', 'lexicons':'Dictionaries / Grammar & Language Studies',
       'namaz':'Namaz, Dua & Wazaif', 'namaaz':'Namaz, Dua & Wazaif', 'salah':'Namaz, Dua & Wazaif', 'salat':'Namaz, Dua & Wazaif', 'dua':'Namaz, Dua & Wazaif', 'duas':'Namaz, Dua & Wazaif', 'wazaif':'Namaz, Dua & Wazaif', 'wazaaif':'Namaz, Dua & Wazaif', 'prayer':'Namaz, Dua & Wazaif', 'prayers':'Namaz, Dua & Wazaif',
