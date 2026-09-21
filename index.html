@@ -4284,6 +4284,15 @@
     const ids = Object.keys(cart).map(Number);
     if(ids.length === 0) return;
     abandonmentFired = true;
+    // Mark this abandonment as "pending" before it's confirmed real. A
+    // plain page refresh also fires pagehide (there's no clean browser
+    // signal to tell "refreshing" apart from "actually leaving" at the
+    // moment it happens), which was wrongly counting every refresh with
+    // items in the cart as an abandoned cart. sessionStorage survives a
+    // reload but is wiped when the tab actually closes, so checking this
+    // flag on the NEXT load tells us, after the fact, whether it was a
+    // refresh — see the reload-correction check further down.
+    try{ sessionStorage.setItem('da_cart_abandon_pending', '1'); }catch(err){}
     trackEvent('cart_abandoned', {
       item_count: cartCount(),
       distinct_titles: ids.length,
@@ -4300,9 +4309,30 @@
     });
   }
   document.addEventListener('visibilitychange', () => {
-    if(document.visibilityState === 'hidden'){ trackCartAbandonment(); flushCategoryBrowseDepth(); }
+    // Cart abandonment intentionally does NOT fire from here anymore —
+    // visibilitychange fires on every tab/app switch (checking WhatsApp,
+    // taking a call, switching apps and coming straight back), which made
+    // "abandoned" wildly over-reported for people who never actually left.
+    // pagehide below is the much closer signal for "actually leaving."
+    if(document.visibilityState === 'hidden'){ flushCategoryBrowseDepth(); }
   });
   window.addEventListener('pagehide', () => { trackCartAbandonment(); flushCategoryBrowseDepth(); });
+
+  // Reload-correction: pagehide still can't perfectly tell a refresh apart
+  // from actually leaving, so on THIS load, check whether the previous
+  // page thought it saw an abandonment and this load turned out to be a
+  // reload of that same page — if so, it wasn't a real abandonment, and
+  // we log a correction event so Umami reflects reality (true abandoned
+  // count = cart_abandoned minus cart_abandoned_correction).
+  try{
+    if(sessionStorage.getItem('da_cart_abandon_pending')){
+      sessionStorage.removeItem('da_cart_abandon_pending');
+      const nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+      if(nav && nav.type === 'reload'){
+        trackEvent('cart_abandoned_correction', { reason: 'page_was_refreshed_not_abandoned' });
+      }
+    }
+  }catch(err){}
 
   function cartCount(){
     return Object.values(cart).reduce((sum, q) => sum + q, 0);
