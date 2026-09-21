@@ -28,6 +28,15 @@ is found or something here gets fixed (move it to Resolved with the date).
 
 ## Resolved (recent)
 
+- [x] 2026-09-20 — Fixed `cart_abandoned` false positives: it was firing on
+  every tab/app switch (visibilitychange) and on ordinary page refresh
+  (pagehide fires for both a reload and truly leaving) — both wrongly
+  counted as an abandoned cart. Removed visibilitychange as a trigger and
+  added reload detection (sessionStorage + Navigation Timing API) that
+  logs a `cart_abandoned_correction` event when a "leaving" turns out to
+  have just been a refresh. True abandonment = cart_abandoned minus
+  cart_abandoned_correction. Verified end-to-end with a headless browser.
+
 - [x] 2026-09-20 — Hardened auto-update against HTTP-level caching: added
   `cache:'no-store'` to every fetch inside the service worker and
   `updateViaCache:'none'` on registration, so a Cache-Control header from
