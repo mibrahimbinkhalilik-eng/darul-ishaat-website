@@ -5718,7 +5718,6 @@
 </div>
 <script>
 (function(){
-  const DISMISS_DAYS = 14;
   const banner   = document.getElementById('daInstallBanner');
   const sub      = document.getElementById('daInstallSub');
   const installBtn = document.getElementById('daInstallBtn');
@@ -5730,9 +5729,14 @@
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
 
   function dismissedRecently(){
+    // Changed from a 14-day cooldown to a per-visit one: closing the
+    // banner only silences it for the REST OF THIS VISIT (sessionStorage),
+    // not for two weeks. Reopening the site — even a minute later in a
+    // fresh tab — shows it again. Keeps nagging every visit until the
+    // customer actually installs, without popping back up mid-session
+    // right after they just closed it (which would just be broken UX).
     try{
-      const ts = parseInt(localStorage.getItem('da_install_dismissed') || '0', 10);
-      return ts && (Date.now() - ts) < DISMISS_DAYS * 24 * 60 * 60 * 1000;
+      return sessionStorage.getItem('da_install_dismissed_session') === '1';
     }catch(err){ return false; }
   }
   function alreadyInstalled(){
@@ -5747,7 +5751,7 @@
     document.body.classList.remove('install-banner-visible');
     banner.classList.remove('show');
     if (remember){
-      try{ localStorage.setItem('da_install_dismissed', String(Date.now())); }catch(err){}
+      try{ sessionStorage.setItem('da_install_dismissed_session', '1'); }catch(err){}
     }
   }
 
@@ -5802,7 +5806,7 @@
       const { outcome } = await promptEvent.userChoice;
       trackEvent('pwa_install_result', { outcome });
       if (outcome !== 'accepted'){
-        try{ localStorage.setItem('da_install_dismissed', String(Date.now())); }catch(err){}
+        try{ sessionStorage.setItem('da_install_dismissed_session', '1'); }catch(err){}
       }
     }catch(err){
       // The prompt() call or userChoice promise threw — a genuine
