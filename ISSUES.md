@@ -28,6 +28,14 @@ is found or something here gets fixed (move it to Resolved with the date).
 
 ## Resolved (recent)
 
+- [x] 2026-09-20 — Fixed 2 self-introduced bugs from the colour-print
+  tagging batches: (1) 7 entries had "Two-colour print" duplicated in
+  their meta text from appearing in two separate batch requests; (2) all
+  82 tagged entries (67 two-colour, 15 four-colour) were missing the
+  `twoColor`/`fourColor` boolean flags that actually drive the site's
+  styled badge — the text was there but the real badge never rendered.
+  Both fixed; every tagged title now shows the proper badge.
+
 - [x] 2026-09-20 — Fixed `cart_abandoned` false positives: it was firing on
   every tab/app switch (visibilitychange) and on ordinary page refresh
   (pagehide fires for both a reload and truly leaving) — both wrongly
