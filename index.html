@@ -879,10 +879,16 @@
 
   .book-card .tag-row{
     display:flex;
-    flex-wrap:wrap;
+    flex-wrap:nowrap;
     align-items:center;
     gap:6px;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    -ms-overflow-style:none;
   }
+  .book-card .tag-row::-webkit-scrollbar{ display:none; }
+  .book-card .tag-row > *{ flex-shrink:0; }
 
   .two-color-badge{
     display:inline-flex;
