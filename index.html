@@ -920,6 +920,24 @@
     white-space:nowrap;
   }
 
+  .imported-paper-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    font-family:'Space Mono', monospace;
+    font-size:0.62rem;
+    font-weight:400;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    color:var(--chrome-ink);
+    background:linear-gradient(135deg, #1d5f7a 0%, #123a4a 100%);
+    border:1px solid rgba(201,169,104,0.55);
+    padding:3px 9px;
+    border-radius:20px;
+    box-shadow:0 2px 6px rgba(15,35,45,0.3), inset 0 1px 0 rgba(255,255,255,0.12);
+    white-space:nowrap;
+  }
+
   .book-card .tag{
     display:inline-block;
     font-family:'Space Mono', monospace;
@@ -3941,7 +3959,8 @@
     + '<button class="filter-chip" data-filter="__english__">English Books</button>'
     + '<button class="filter-chip" data-filter="__arabic__">Arabic Books</button>'
     + '<button class="filter-chip" data-filter="__twocolor__">2-Color Printing</button>'
-    + '<button class="filter-chip" data-filter="__fourcolor__">4-Color Printing</button>';
+    + '<button class="filter-chip" data-filter="__fourcolor__">4-Color Printing</button>'
+    + '<button class="filter-chip" data-filter="__importedpaper__">Imported Paper</button>';
 
   // Normalizes text for search so common English transliteration spelling
   // variants of Urdu/Arabic names and titles all match each other —
@@ -4076,6 +4095,7 @@
     if(activeFilter === '__sets__') return /\b([2-9]|\d{2,})\s+volumes\b/i.test(b.meta);
     if(activeFilter === '__twocolor__') return !!b.twoColor;
     if(activeFilter === '__fourcolor__') return !!b.fourColor;
+    if(activeFilter === '__importedpaper__') return /\b([2-9]|\d{2,})\s+volumes\b/i.test(b.meta) || b.meta.includes('English');
     if(activeFilter === '__shuruhat__') return /\bsharh\b/i.test(b.title) || /شرح/.test(b.urdu);
     if(activeFilter === '__hajjramadan__') return /\b(hajj|umrah|umra|ziyarat|ramadan|ramzan|fasting|zakat|zakaat|zakah|zakaah)\b/i.test(b.title + ' ' + b.meta) || /\broza\b(?!-)/i.test(b.title + ' ' + b.meta) || /(?<![\u0600-\u06FF])(حج|عمرہ|زیارت|رمضان|روزہ|روزے|زکوٰۃ|زکات|زکاۃ|زکوة)(?![\u0600-\u06FF])/.test(b.urdu);
     if(activeFilter === '__qissas__') return /\b(qissas|qisas|stories|story|kahani|kahaniyan)\b/i.test(b.title + ' ' + b.meta) || /(?<![\u0600-\u06FF])(قصص|کہانی|کہانیاں)(?![\u0600-\u06FF])/.test(b.urdu);
@@ -4194,6 +4214,12 @@
     const colors = coverColors[b.cat] || { main: '#4a4a4a', accent: '#b8883a', text: '#ffffff' };
     const accent = (b.img && b.bg) ? b.bg : colors.accent;
     const coverAspect = b.img ? (IMG_ASPECT[b.img] || FALLBACK_ASPECT) : null;
+    // Imported Paper: every multi-volume Set and every English-language
+    // title, per owner instruction. Computed from the same volume-count
+    // regex and language check the Sets/English tabs already use, rather
+    // than a stored per-book flag, so it can never drift out of sync with
+    // what those tabs actually show.
+    const importedPaper = /\b([2-9]|\d{2,})\s+volumes\b/i.test(b.meta) || b.meta.includes('English');
     return `
       <div class="book-card" data-book-id="${b.id}">
         <div class="book-cover-3d${b.img ? ' has-photo' : ''}" style="--cover-main: ${colors.main}; --cover-accent: ${accent};${coverAspect ? ` aspect-ratio:${coverAspect};` : ''}">
@@ -4223,6 +4249,7 @@
             <span class="tag">${b.cat}</span>
             ${b.twoColor ? `<span class="two-color-badge">✨ 2-Color Printing</span>` : ''}
             ${b.fourColor ? `<span class="four-color-badge"><svg viewBox="0 0 16 16" width="12" height="12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="6" cy="6" r="4.4" fill="currentColor" opacity="0.55"/><circle cx="10.5" cy="6" r="4.4" fill="currentColor" opacity="0.55"/><circle cx="8.25" cy="10" r="4.4" fill="currentColor" opacity="0.55"/></svg> 4-Color Printing</span>` : ''}
+            ${importedPaper ? `<span class="imported-paper-badge">📄 Imported Paper</span>` : ''}
           </div>
           <h3>${b.title}</h3>
           ${b.urdu ? `<div class="ur-name">${b.urdu}</div>` : ''}
@@ -4995,6 +5022,7 @@
       'multi volume':'__sets__', 'multi-volume':'__sets__', 'volume sets':'__sets__',
       'two color':'__twocolor__', 'two colour':'__twocolor__', '2 color':'__twocolor__', '2 colour':'__twocolor__', 'dorangah':'__twocolor__',
       'four color':'__fourcolor__', 'four colour':'__fourcolor__', '4 color':'__fourcolor__', '4 colour':'__fourcolor__', 'full color':'__fourcolor__', 'full colour':'__fourcolor__',
+      'imported paper':'__importedpaper__', 'imported quality':'__importedpaper__',
       'grammar':'Dictionaries / Grammar & Language Studies', 'nahw':'Dictionaries / Grammar & Language Studies', 'balagha':'Dictionaries / Grammar & Language Studies',
       'dictionary':'Dictionaries / Grammar & Language Studies', 'dictionaries':'Dictionaries / Grammar & Language Studies', 'lexicon':'Dictionaries / Grammar & Language Studies', 'lexicons':'Dictionaries / Grammar & Language Studies',
       'namaz':'Namaz, Dua & Wazaif', 'namaaz':'Namaz, Dua & Wazaif', 'salah':'Namaz, Dua & Wazaif', 'salat':'Namaz, Dua & Wazaif', 'dua':'Namaz, Dua & Wazaif', 'duas':'Namaz, Dua & Wazaif', 'wazaif':'Namaz, Dua & Wazaif', 'wazaaif':'Namaz, Dua & Wazaif', 'prayer':'Namaz, Dua & Wazaif', 'prayers':'Namaz, Dua & Wazaif',
