@@ -4162,19 +4162,15 @@
       });
     }
 
-    // Default category sorting: on any tab other than "All" (including the
-    // English/Urdu-Arabic/Sets/شروحات pseudo-tabs), surface multi-volume
-    // sets, larger sets, and comprehensive works first. Sort by volume/set
-    // count descending, then alphabetically by title as a stable
-    // tie-breaker (the catalogue has no price field to sort by). The "All"
-    // tab is left untouched so its curated featured order still applies.
-    if(activeFilter !== 'all'){
-      filtered = filtered.slice().sort((a, b) => {
-        const va = getVolumeCount(a.meta), vb = getVolumeCount(b.meta);
-        if(vb !== va) return vb - va;
-        return a.title.localeCompare(b.title);
-      });
-    }
+    // Default sorting: surface multi-volume sets, larger sets, and
+    // comprehensive works first on every tab, including "All" — sort by
+    // volume/set count descending, then alphabetically by title as a
+    // stable tie-breaker (the catalogue has no price field to sort by).
+    filtered = filtered.slice().sort((a, b) => {
+      const va = getVolumeCount(a.meta), vb = getVolumeCount(b.meta);
+      if(vb !== va) return vb - va;
+      return a.title.localeCompare(b.title);
+    });
 
     return filtered;
   }
