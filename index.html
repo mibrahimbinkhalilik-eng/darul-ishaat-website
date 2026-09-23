@@ -4172,6 +4172,17 @@
       return a.title.localeCompare(b.title);
     });
 
+    // Pinned exception: on the 4-Color Printing tab specifically, Ilmi
+    // Kashkol (Thamarat-ul-Awraq) always leads, ahead of the normal
+    // volume-count sort above.
+    if(activeFilter === '__fourcolor__'){
+      const idx = filtered.findIndex(b => b.title.includes('Ilmi Kashkol'));
+      if(idx > 0){
+        const [pinned] = filtered.splice(idx, 1);
+        filtered.unshift(pinned);
+      }
+    }
+
     return filtered;
   }
 
