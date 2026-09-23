@@ -4079,7 +4079,7 @@
     });
   }
 
-  let visibleCount = 6;
+  let visibleCount = 24;
 
   // Extracts a book's volume/set size from its `meta` string so category
   // views can surface multi-volume sets and comprehensive works first.
@@ -4769,7 +4769,7 @@
           // get destroyed and re-decoded on every click.
           const filtered = getFilteredBooks();
           const prevCount = visibleCount;
-          visibleCount += 6;
+          visibleCount += 24;
           const newSlice = filtered.slice(prevCount, visibleCount);
           cardGrid.insertAdjacentHTML('beforeend', newSlice.map(bookCardHTML).join(''));
           updateLoadMoreUI(filtered.length, Math.min(visibleCount, filtered.length));
@@ -4777,7 +4777,7 @@
         });
         cardGrid.parentNode.insertBefore(loadMoreBtn, cardGrid.nextSibling);
       }
-      loadMoreBtn.textContent = `Load ${Math.min(6, filteredLength - shownLength)} more`;
+      loadMoreBtn.textContent = `Load ${Math.min(24, filteredLength - shownLength)} more`;
       loadMoreBtn.style.display = 'block';
     } else {
       catCount.textContent = `Showing ${shownLength} of ${CATALOGUE.length} verified entries.`;
@@ -4856,7 +4856,7 @@
     if(catSearch.value.trim()){
       catSearch.value = '';
     }
-    visibleCount = 6;
+    visibleCount = 24;
     renderCatalogue();
     trackEvent('select_content', {
       content_type: 'category_tab',
@@ -4880,7 +4880,7 @@
 
     clearTimeout(searchDebounceTimer);
     searchDebounceTimer = setTimeout(() => {
-      visibleCount = 6;
+      visibleCount = 24;
       renderCatalogue();
     }, 150);
 
