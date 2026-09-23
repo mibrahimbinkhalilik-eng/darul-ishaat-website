@@ -4079,7 +4079,7 @@
     });
   }
 
-  let visibleCount = 24;
+  let visibleCount = 12;
 
   // Extracts a book's volume/set size from its `meta` string so category
   // views can surface multi-volume sets and comprehensive works first.
@@ -4776,7 +4776,7 @@
           // get destroyed and re-decoded on every click.
           const filtered = getFilteredBooks();
           const prevCount = visibleCount;
-          visibleCount += 24;
+          visibleCount += 12;
           const newSlice = filtered.slice(prevCount, visibleCount);
           cardGrid.insertAdjacentHTML('beforeend', newSlice.map(bookCardHTML).join(''));
           updateLoadMoreUI(filtered.length, Math.min(visibleCount, filtered.length));
@@ -4784,7 +4784,7 @@
         });
         cardGrid.parentNode.insertBefore(loadMoreBtn, cardGrid.nextSibling);
       }
-      loadMoreBtn.textContent = `Load ${Math.min(24, filteredLength - shownLength)} more`;
+      loadMoreBtn.textContent = `Load ${Math.min(12, filteredLength - shownLength)} more`;
       loadMoreBtn.style.display = 'block';
     } else {
       catCount.textContent = `Showing ${shownLength} of ${CATALOGUE.length} verified entries.`;
@@ -4863,7 +4863,7 @@
     if(catSearch.value.trim()){
       catSearch.value = '';
     }
-    visibleCount = 24;
+    visibleCount = 12;
     renderCatalogue();
     trackEvent('select_content', {
       content_type: 'category_tab',
@@ -4887,7 +4887,7 @@
 
     clearTimeout(searchDebounceTimer);
     searchDebounceTimer = setTimeout(() => {
-      visibleCount = 24;
+      visibleCount = 12;
       renderCatalogue();
     }, 150);
 
@@ -5036,6 +5036,9 @@
       'two color':'__twocolor__', 'two colour':'__twocolor__', '2 color':'__twocolor__', '2 colour':'__twocolor__', 'dorangah':'__twocolor__',
       'four color':'__fourcolor__', 'four colour':'__fourcolor__', '4 color':'__fourcolor__', '4 colour':'__fourcolor__', 'full color':'__fourcolor__', 'full colour':'__fourcolor__',
       'imported paper':'__importedpaper__', 'imported quality':'__importedpaper__',
+      'shuruhat':'__shuruhat__', 'sharh':'__shuruhat__', 'sharah':'__shuruhat__', 'commentaries':'__shuruhat__', 'commentary':'__shuruhat__',
+      'hajj':'__hajjramadan__', 'umrah':'__hajjramadan__', 'umra':'__hajjramadan__', 'ramadan':'__hajjramadan__', 'ramzan':'__hajjramadan__', 'roza':'__hajjramadan__', 'zakat':'__hajjramadan__', 'zakaat':'__hajjramadan__',
+      'qissas':'__qissas__', 'qisas':'__qissas__', 'stories':'__qissas__', 'story':'__qissas__', 'kahaniyan':'__qissas__', 'kahani':'__qissas__',
       'grammar':'Dictionaries / Grammar & Language Studies', 'nahw':'Dictionaries / Grammar & Language Studies', 'balagha':'Dictionaries / Grammar & Language Studies',
       'dictionary':'Dictionaries / Grammar & Language Studies', 'dictionaries':'Dictionaries / Grammar & Language Studies', 'lexicon':'Dictionaries / Grammar & Language Studies', 'lexicons':'Dictionaries / Grammar & Language Studies',
       'namaz':'Namaz, Dua & Wazaif', 'namaaz':'Namaz, Dua & Wazaif', 'salah':'Namaz, Dua & Wazaif', 'salat':'Namaz, Dua & Wazaif', 'dua':'Namaz, Dua & Wazaif', 'duas':'Namaz, Dua & Wazaif', 'wazaif':'Namaz, Dua & Wazaif', 'wazaaif':'Namaz, Dua & Wazaif', 'prayer':'Namaz, Dua & Wazaif', 'prayers':'Namaz, Dua & Wazaif',
