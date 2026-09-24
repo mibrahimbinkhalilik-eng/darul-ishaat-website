@@ -28,6 +28,14 @@ is found or something here gets fixed (move it to Resolved with the date).
 
 ## Resolved (recent)
 
+- [x] 2026-09-24 — Fixed slow catalogue image loading: 601 images were
+  never capped to the site's own 650-700px/quality~85 convention (many
+  were 600-970KB). Resized/recompressed all of them (avg 196KB -> 123KB,
+  37% total reduction, no visible quality loss). Also dialed the Load
+  More batch size back from 24 to 12 — the jump to 24 (made earlier the
+  same day) was too much added bandwidth per batch for this project's
+  demonstrated slow-connection users.
+
 - [x] 2026-09-20 — Fixed 2 self-introduced bugs from the colour-print
   tagging batches: (1) 7 entries had "Two-colour print" duplicated in
   their meta text from appearing in two separate batch requests; (2) all
