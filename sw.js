@@ -1,12 +1,9 @@
-const CACHE_NAME = "darul-ishaat-v3";
+const CACHE_NAME = "darul-ishaat-v4";
 const CORE_ASSETS = [
   "./",
   "./index.html",
   "./manifest.json"
 ];
-
-// File extensions that rarely change once published — safe to cache-first.
-const STATIC_ASSET_RE = /\.(png|jpg|jpeg|gif|webp|svg|ico|woff2?|ttf)$/i;
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -31,48 +28,33 @@ self.addEventListener("fetch", (event) => {
   if (req.method !== "GET") return;
   if (!req.url.startsWith(self.location.origin)) return;
 
-  const isNavigation = req.mode === "navigate";
-  const isStaticAsset = STATIC_ASSET_RE.test(req.url);
-
-  if (isNavigation || !isStaticAsset) {
-    // Network-first: HTML, JS, CSS, manifest — always get the latest deploy.
-    // cache:'no-store' bypasses the browser's own HTTP cache (a separate
-    // layer underneath fetch(), outside the Service Worker's Cache API) —
-    // without it, a long Cache-Control max-age from the host could still
-    // quietly serve a stale response here even though this code is
-    // "network-first" in intent. Falls back to the SW cache only offline.
-    event.respondWith(
-      fetch(req, { cache: 'no-store' })
-        .then((response) => {
-          const copy = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(req, copy));
+  // Stale-while-revalidate for everything: HTML, JS, CSS, manifest,
+  // images, fonts, icons alike. Serve the cached copy immediately (fast,
+  // works even on a very slow or unstable connection), while always also
+  // fetching a fresh copy in the background to update the cache for next
+  // time. cache:'no-store' on that background fetch bypasses the
+  // browser's own HTTP cache layer so a Cache-Control header from the
+  // host can't quietly serve a stale response there either.
+  //
+  // This replaces an earlier network-first/no-store strategy for HTML
+  // that forced every single visit to fully re-download the page from
+  // the network before showing anything — on a slow connection that
+  // could take minutes, during which the page would sit there half
+  // loaded (this is what caused a reported "catalogue stays blank"
+  // issue). Page freshness across deploys is still handled by the
+  // separate, faster mechanism in index.html: it explicitly checks for
+  // a new service worker on every open and every hour, and auto-reloads
+  // once a new one takes over — so updates still land promptly without
+  // holding every visit hostage to a live fetch first.
+  event.respondWith(
+    caches.open(CACHE_NAME).then((cache) =>
+      cache.match(req).then((cached) => {
+        const network = fetch(req, { cache: 'no-store' }).then((response) => {
+          if (response && response.ok) cache.put(req, response.clone());
           return response;
-        })
-        .catch(() => caches.match(req).then((cached) => cached || caches.match("./index.html")))
-    );
-  } else {
-    // Stale-while-revalidate: images, fonts, icons. Serve the cached copy
-    // immediately for a fast repeat load, but ALWAYS also fetch a fresh
-    // copy in the background (bypassing HTTP cache too, same reasoning as
-    // above) and overwrite the cache entry with it. Plain cache-first (the
-    // old strategy) never re-checked the network once an image was
-    // cached, so re-uploading a fresh cover photo to the same path (e.g.
-    // images/book-367.jpg, the normal way this catalogue's photo-swap
-    // workflow works) could stay stale in a returning visitor's cache
-    // indefinitely, with no way for it to self-correct. This still shows
-    // the cached image on THIS load, but the swap is picked up
-    // automatically by the NEXT load instead of requiring the visitor to
-    // clear the app's storage.
-    event.respondWith(
-      caches.open(CACHE_NAME).then((cache) =>
-        cache.match(req).then((cached) => {
-          const network = fetch(req, { cache: 'no-store' }).then((response) => {
-            if (response && response.ok) cache.put(req, response.clone());
-            return response;
-          }).catch(() => cached);
-          return cached || network;
-        })
-      )
-    );
-  }
+        }).catch(() => cached || (req.mode === "navigate" ? caches.match("./index.html") : undefined));
+        return cached || network;
+      })
+    )
+  );
 });
