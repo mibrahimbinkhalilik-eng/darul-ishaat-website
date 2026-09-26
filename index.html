@@ -4010,6 +4010,7 @@
   filterRow.innerHTML = categoryChips.join('')
     + (categories.includes('Dictionaries / Grammar & Language Studies') ? '' : shuruhatChip)
     + '<button class="filter-chip" data-filter="__hajjramadan__">Hajj/Umrah & Ramadan/Roza/Zakat</button>'
+    + '<button class="filter-chip" data-filter="__islamicbanking__">Islamic Banking &amp; Riba</button>'
     + (categories.includes('Seerah & History') ? '' : qissasChip)
     + '<button class="filter-chip" data-filter="__english__">English Books</button>'
     + '<button class="filter-chip" data-filter="__arabic__">Arabic Books</button>'
@@ -4160,6 +4161,7 @@
     if(activeFilter === '__importedpaper__') return /\b([2-9]|\d{2,})\s+volumes\b/i.test(meta) || meta.includes('English');
     if(activeFilter === '__shuruhat__') return /\bsharh\b/i.test(title) || /شرح/.test(urdu);
     if(activeFilter === '__hajjramadan__') return /\b(hajj|umrah|umra|ziyarat|ramadan|ramzan|fasting|zakat|zakaat|zakah|zakaah)\b/i.test(title + ' ' + meta) || /\broza\b(?!-)/i.test(title + ' ' + meta) || /(?<![\u0600-\u06FF])(حج|عمرہ|زیارت|رمضان|روزہ|روزے|زکوٰۃ|زکات|زکاۃ|زکوة)(?![\u0600-\u06FF])/.test(urdu);
+    if(activeFilter === '__islamicbanking__') return /\b(bank|banking|banks|riba|sood|sud|interest|takaful|murabaha|murabahah|ijarah|ijara|leasing|provident fund)\b/i.test(title + ' ' + meta) || /(?<![\u0600-\u06FF])(بینک|بینکنگ|سود|تکافل|مرابحہ|اجارہ)(?![\u0600-\u06FF])/.test(urdu);
     if(activeFilter === '__qissas__') return /\b(qissas|qisas|stories|story|kahani|kahaniyan)\b/i.test(title + ' ' + meta) || /(?<![\u0600-\u06FF])(قصص|کہانی|کہانیاں)(?![\u0600-\u06FF])/.test(urdu);
     // Case-insensitive category match so a stray casing difference in
     // newly-added data (e.g. "fiqh & fatawa" vs "Fiqh & Fatawa") still filters correctly.
@@ -5148,6 +5150,7 @@
       'imported paper':'__importedpaper__', 'imported quality':'__importedpaper__',
       'shuruhat':'__shuruhat__', 'sharh':'__shuruhat__', 'sharah':'__shuruhat__', 'commentaries':'__shuruhat__', 'commentary':'__shuruhat__',
       'hajj':'__hajjramadan__', 'umrah':'__hajjramadan__', 'umra':'__hajjramadan__', 'ramadan':'__hajjramadan__', 'ramzan':'__hajjramadan__', 'roza':'__hajjramadan__', 'zakat':'__hajjramadan__', 'zakaat':'__hajjramadan__',
+      'bank':'__islamicbanking__', 'banking':'__islamicbanking__', 'banks':'__islamicbanking__', 'riba':'__islamicbanking__', 'sood':'__islamicbanking__', 'sud':'__islamicbanking__', 'interest':'__islamicbanking__', 'takaful':'__islamicbanking__', 'murabaha':'__islamicbanking__', 'ijarah':'__islamicbanking__', 'ijara':'__islamicbanking__', 'leasing':'__islamicbanking__',
       'qissas':'__qissas__', 'qisas':'__qissas__', 'stories':'__qissas__', 'story':'__qissas__', 'kahaniyan':'__qissas__', 'kahani':'__qissas__',
       'grammar':'Dictionaries / Grammar & Language Studies', 'nahw':'Dictionaries / Grammar & Language Studies', 'balagha':'Dictionaries / Grammar & Language Studies',
       'dictionary':'Dictionaries / Grammar & Language Studies', 'dictionaries':'Dictionaries / Grammar & Language Studies', 'lexicon':'Dictionaries / Grammar & Language Studies', 'lexicons':'Dictionaries / Grammar & Language Studies',
