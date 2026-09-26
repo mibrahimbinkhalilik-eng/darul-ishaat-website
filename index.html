@@ -3243,7 +3243,7 @@
     // the photo from the very first paint — no waiting on image load, no
     // flash of a wrong-shaped box, no padding regardless of the photo's own
     // aspect ratio (cover-only vs cover+spine vs wide multi-volume sets).
-    const IMG_ASPECT = {"images/book-004.jpg": "1070 / 1600", "images/book-005.jpg": "940 / 1172", "images/book-006-front.jpg": "1015 / 1588", "images/book-006-spine.jpg": "247 / 1588", "images/book-007.jpg": "945 / 1600", "images/book-009.jpg": "600 / 422", "images/book-010-front.jpg": "1600 / 730", "images/book-011-front.jpg": "1600 / 631", "images/book-012.jpg": "426 / 600", "images/book-013.jpg": "908 / 1600", "images/book-014.jpg": "895 / 1600", "images/book-015.jpg": "600 / 492", "images/book-016.jpg": "976 / 1600", "images/book-017-front.jpg": "1600 / 1023", "images/book-018.jpg": "1020 / 1600", "images/book-019.jpg": "1016 / 1600", "images/book-020-front.jpg": "774 / 1600", "images/book-021.jpg": "1001 / 1600", "images/book-022-front.jpg": "1600 / 1327", "images/book-023-front.jpg": "1121 / 1600", "images/book-024-front.jpg": "893 / 1600", "images/book-025.jpg": "532 / 600", "images/book-026-front.jpg": "1600 / 786", "images/book-028-front.jpg": "1600 / 858", "images/book-030-front.jpg": "1600 / 658", "images/book-033.jpg": "260 / 416", "images/book-034.jpg": "600 / 277", "images/book-035.jpg": "650 / 550", "images/book-036.jpg": "947 / 1600", "images/book-037.jpg": "958 / 1600", "images/book-038.jpg": "340 / 600", "images/book-039-front.jpg": "1455 / 1600", "images/book-040.jpg": "982 / 1600", "images/book-041-front.jpg": "1080 / 930", "images/book-042.jpg": "364 / 600", "images/book-043.jpg": "997 / 1600", "images/book-044-front.jpg": "936 / 1488", "images/book-045-front.jpg": "872 / 1244", "images/book-046-front.jpg": "959 / 1589", "images/book-047-front.jpg": "863 / 1600", "images/book-048.jpg": "650 / 548", "images/book-049.jpg": "650 / 531", "images/book-050.jpg": "650 / 708", "images/book-051-front.jpg": "329 / 1254", "images/book-052.jpg": "650 / 1095", "images/book-053-front.jpg": "1080 / 1051", "images/book-054.jpg": "650 / 1042", "images/book-055-front.jpg": "987 / 458", "images/book-056.jpg": "961 / 1600", "images/book-059.jpg": "966 / 1600", "images/book-060.jpg": "1009 / 1600", "images/book-061.jpg": "1004 / 1600", "images/book-062.jpg": "980 / 1600", "images/book-063.jpg": "1080 / 1559", "images/book-066.jpg": "1160 / 1600", "images/book-067.jpg": "342 / 600", "images/book-068.jpg": "980 / 1600", "images/book-069.jpg": "600 / 469", "images/book-070.jpg": "600 / 564", "images/book-071.jpg": "600 / 456", "images/book-072.jpg": "600 / 552", "images/book-073.jpg": "979 / 1600", "images/book-074.jpg": "398 / 600", "images/book-075.jpg": "319 / 600", "images/book-076-front.jpg": "1062 / 1600", "images/book-077.jpg": "414 / 600", "images/book-078.jpg": "407 / 600", "images/book-079.jpg": "393 / 600", "images/book-080.jpg": "421 / 600", "images/book-081.jpg": "351 / 599", "images/book-082.jpg": "980 / 1600", "images/book-083.jpg": "458 / 600", "images/book-084.jpg": "404 / 600", "images/book-085.jpg": "452 / 600", "images/book-086.jpg": "600 / 478", "images/book-087.jpg": "600 / 423", "images/book-088.jpg": "403 / 600", "images/book-089.jpg": "600 / 412", "images/book-090.jpg": "600 / 469", "images/book-091.jpg": "440 / 600", "images/book-092.jpg": "600 / 401", "images/book-093.jpg": "600 / 563", "images/book-094.jpg": "402 / 600", "images/book-095.jpg": "650 / 1162", "images/book-096.jpg": "1600 / 1404", "images/book-097.jpg": "415 / 600", "images/book-098-front.jpg": "688 / 1600", "images/book-099.jpg": "1009 / 1556", "images/book-100.jpg": "650 / 972", "images/book-101.jpg": "650 / 1009", "images/book-102.jpg": "499 / 600", "images/book-103.jpg": "650 / 964", "images/book-104.jpg": "260 / 343", "images/book-106-front.jpg": "1080 / 1156", "images/book-107-front.jpg": "949 / 1600", "images/book-108-front.jpg": "1167 / 1600", "images/book-109-front.jpg": "611 / 614", "images/book-110-front.jpg": "1468 / 1599", "images/book-111-front.jpg": "1056 / 1736", "images/book-112-front.jpg": "1266 / 1600", "images/book-113.jpg": "868 / 1600", "images/book-114-front.jpg": "828 / 1600", "images/book-115.jpg": "1154 / 1600", "images/book-116-front.jpg": "701 / 1600", "images/book-117.jpg": "980 / 1600", "images/book-118.jpg": "1182 / 1600", "images/book-119.jpg": "1098 / 1600", "images/book-120-front.jpg": "963 / 1600", "images/book-121-front.jpg": "659 / 1600", "images/book-122.jpg": "1124 / 1600", "images/book-123-front.jpg": "1227 / 1600", "images/book-124.jpg": "1565 / 1600", "images/book-125.jpg": "1600 / 616", "images/book-126-front.jpg": "798 / 1600", "images/book-127.jpg": "347 / 600", "images/book-128-front.jpg": "1370 / 1600", "images/book-129.jpg": "1029 / 1600", "images/book-130-front.jpg": "1600 / 1011", "images/book-131-front.jpg": "1464 / 1600", "images/book-132-front.jpg": "1349 / 1599", "images/book-133-front.jpg": "1245 / 1600", "images/book-134-front.jpg": "1434 / 1599", "images/book-135-front.jpg": "1390 / 1599", "images/book-136-front.jpg": "1600 / 1575", "images/book-137.jpg": "1347 / 1600", "images/book-138.jpg": "1501 / 1600", "images/book-139.jpg": "927 / 1134", "images/book-140.jpg": "1292 / 1600", "images/book-141.jpg": "1135 / 1600", "images/book-142.jpg": "650 / 780", "images/book-143.jpg": "1067 / 1600", "images/book-144.jpg": "1146 / 1600", "images/book-145.jpg": "1102 / 1600", "images/book-146.jpg": "650 / 869", "images/book-147.jpg": "650 / 894", "images/book-148.jpg": "448 / 600", "images/book-149.jpg": "650 / 460", "images/book-150.jpg": "1164 / 1600", "images/book-151-front.jpg": "1248 / 1600", "images/book-152.jpg": "650 / 669", "images/book-153.jpg": "650 / 787", "images/book-154.jpg": "650 / 882", "images/book-155.jpg": "650 / 809", "images/book-156.jpg": "650 / 818", "images/book-157.jpg": "650 / 949", "images/book-159.jpg": "650 / 871", "images/book-160.jpg": "650 / 776", "images/book-161.jpg": "650 / 1117", "images/book-162.jpg": "650 / 787", "images/book-163.jpg": "1168 / 1600", "images/book-164.jpg": "1265 / 1600", "images/book-165.jpg": "1019 / 1600", "images/book-166.jpg": "1226 / 1600", "images/book-167.jpg": "1080 / 1600", "images/book-169.jpg": "1053 / 1600", "images/book-172.jpg": "1600 / 1485", "images/book-173.jpg": "650 / 600", "images/book-174.jpg": "650 / 1053", "images/book-175.jpg": "650 / 1071", "images/book-176.jpg": "650 / 1028", "images/book-177.jpg": "650 / 957", "images/book-178.jpg": "650 / 1024", "images/book-179.jpg": "650 / 1049", "images/book-180.jpg": "650 / 1176", "images/book-181.jpg": "650 / 913", "images/book-182.jpg": "650 / 1089", "images/book-183.jpg": "650 / 670", "images/book-184.jpg": "650 / 705", "images/book-185.jpg": "650 / 544", "images/book-186.jpg": "650 / 1041", "images/book-187.jpg": "650 / 1010", "images/book-188.jpg": "650 / 516", "images/book-189.jpg": "650 / 897", "images/book-190.jpg": "650 / 647", "images/book-191.jpg": "650 / 634", "images/book-192.jpg": "650 / 1057", "images/book-193.jpg": "650 / 1039", "images/book-194.jpg": "650 / 941", "images/book-195.jpg": "650 / 874", "images/book-196.jpg": "650 / 897", "images/book-197.jpg": "650 / 943", "images/book-198.jpg": "650 / 879", "images/book-199.jpg": "650 / 1130", "images/book-200.jpg": "650 / 853", "images/book-201.jpg": "650 / 858", "images/book-202.jpg": "650 / 935", "images/book-203.jpg": "650 / 857", "images/book-204.jpg": "650 / 856", "images/book-205.jpg": "650 / 934", "images/book-206.jpg": "650 / 1096", "images/book-207.jpg": "650 / 1135", "images/book-208.jpg": "650 / 895", "images/book-209.jpg": "650 / 1020", "images/book-210.jpg": "650 / 1104", "images/book-211.jpg": "650 / 1037", "images/book-212.jpg": "650 / 894", "images/book-213.jpg": "650 / 1077", "images/book-214.jpg": "650 / 1049", "images/book-215.jpg": "650 / 842", "images/book-216.jpg": "650 / 1099", "images/book-217.jpg": "650 / 1081", "images/book-218.jpg": "1004 / 1600", "images/book-219.jpg": "1008 / 1600", "images/book-220.jpg": "966 / 1600", "images/book-221.jpg": "991 / 1600", "images/book-222.jpg": "934 / 1600", "images/book-223.jpg": "1384 / 1599", "images/book-224.jpg": "969 / 1600", "images/book-225.jpg": "1168 / 1600", "images/book-226.jpg": "955 / 1600", "images/book-227.jpg": "980 / 1600", "images/book-228.jpg": "1032 / 1600", "images/book-229.jpg": "1217 / 1600", "images/book-230.jpg": "974 / 1600", "images/book-231.jpg": "969 / 1600", "images/book-232.jpg": "971 / 1600", "images/book-233.jpg": "1035 / 1600", "images/book-234.jpg": "969 / 1600", "images/book-235.jpg": "931 / 1600", "images/book-236.jpg": "973 / 1600", "images/book-237.jpg": "1067 / 1600", "images/book-238.jpg": "994 / 1600", "images/book-239.jpg": "1149 / 1600", "images/book-240.jpg": "1004 / 1600", "images/book-241.jpg": "1528 / 1600", "images/book-242.jpg": "974 / 1600", "images/book-243.jpg": "1009 / 1600", "images/book-244.jpg": "1010 / 1600", "images/book-245.jpg": "975 / 1600", "images/book-246.jpg": "1185 / 1600", "images/book-247.jpg": "974 / 1600", "images/book-248.jpg": "1205 / 1600", "images/book-249.jpg": "947 / 1600", "images/book-250.jpg": "1112 / 1600", "images/book-251.jpg": "1123 / 1600", "images/book-252.jpg": "1493 / 1600", "images/book-253.jpg": "982 / 1600", "images/book-254.jpg": "1030 / 1600", "images/book-255.jpg": "984 / 1600", "images/book-256.jpg": "1092 / 1600", "images/book-257.jpg": "962 / 1600", "images/book-258.jpg": "955 / 1600", "images/book-259.jpg": "985 / 1600", "images/book-260.jpg": "999 / 1600", "images/book-261.jpg": "953 / 1600", "images/book-262.jpg": "812 / 1600", "images/book-509.jpg": "970 / 1600", "images/book-450.jpg": "977 / 1600", "images/book-510.jpg": "969 / 1600", "images/book-511.jpg": "1004 / 1600", "images/book-512.jpg": "899 / 1600", "images/book-513.jpg": "969 / 1600", "images/book-514.jpg": "1022 / 1600", "images/book-515.jpg": "963 / 1600", "images/book-516.jpg": "935 / 1600", "images/book-517.jpg": "1151 / 1600", "images/book-518.jpg": "968 / 1600", "images/book-519.jpg": "989 / 1600", "images/book-520.jpg": "928 / 1600", "images/book-521.jpg": "1053 / 1600", "images/book-522.jpg": "1001 / 1600", "images/book-523.jpg": "990 / 1600", "images/book-524.jpg": "945 / 1600", "images/book-525.jpg": "921 / 1600", "images/book-526.jpg": "988 / 1600", "images/book-527.jpg": "867 / 1600", "images/book-528.jpg": "1161 / 1600", "images/book-529.jpg": "941 / 1600", "images/book-530.jpg": "958 / 1600", "images/book-531.jpg": "892 / 1600", "images/book-532.jpg": "1379 / 1600", "images/book-533.jpg": "1600 / 1124", "images/book-534.jpg": "1532 / 1599", "images/book-535.jpg": "1600 / 1095", "images/book-536.jpg": "1046 / 1600", "images/book-537.jpg": "958 / 1600", "images/book-538.jpg": "922 / 1600", "images/book-539.jpg": "987 / 1600", "images/book-540.jpg": "1058 / 1600", "images/book-541.jpg": "1001 / 1600", "images/book-542.jpg": "1599 / 1384", "images/book-543.jpg": "996 / 1600", "images/book-544.jpg": "1006 / 1600", "images/book-545.jpg": "1014 / 1600", "images/book-546.jpg": "1007 / 1600", "images/book-547.jpg": "1004 / 1600", "images/book-548.jpg": "1010 / 1600", "images/book-549.jpg": "1019 / 1600", "images/book-550.jpg": "1012 / 1600", "images/book-551.jpg": "1007 / 1600", "images/book-552.jpg": "934 / 1600", "images/book-553.jpg": "1003 / 1600", "images/book-554.jpg": "1050 / 1600", "images/book-555.jpg": "1054 / 1600", "images/book-556.jpg": "1016 / 1600", "images/book-557.jpg": "993 / 1600", "images/book-558.jpg": "959 / 1600", "images/book-559.jpg": "996 / 1600", "images/book-560.jpg": "1065 / 1600", "images/book-561.jpg": "952 / 1600", "images/book-562.jpg": "933 / 1600", "images/book-563.jpg": "971 / 1600", "images/book-564.jpg": "1096 / 1600", "images/book-565.jpg": "944 / 1600", "images/book-566.jpg": "972 / 1600", "images/book-567.jpg": "944 / 1600", "images/book-568.jpg": "1600 / 1101", "images/book-569.jpg": "884 / 1600", "images/book-570.jpg": "929 / 1600", "images/book-571.jpg": "1097 / 1600", "images/book-572.jpg": "954 / 1600", "images/book-573.jpg": "1058 / 1600", "images/book-574.jpg": "993 / 1600", "images/book-575.jpg": "982 / 1600", "images/book-576.jpg": "993 / 1600", "images/book-577.jpg": "1109 / 1600", "images/book-578.jpg": "1402 / 1600", "images/book-579.jpg": "1600 / 1441", "images/book-580.jpg": "1008 / 1600", "images/book-581.jpg": "958 / 1600", "images/book-582.jpg": "1227 / 1599", "images/book-583.jpg": "922 / 1600", "images/book-584.jpg": "991 / 1600", "images/book-585.jpg": "925 / 1600", "images/book-586.jpg": "948 / 1600", "images/book-587.jpg": "984 / 1600", "images/book-588.jpg": "1288 / 1599", "images/book-589.jpg": "1004 / 1600", "images/book-590.jpg": "975 / 1600", "images/book-591.jpg": "962 / 1600", "images/book-592.jpg": "1485 / 1600", "images/book-593.jpg": "983 / 1600", "images/book-594.jpg": "1041 / 1600", "images/book-595.jpg": "941 / 1600", "images/book-596.jpg": "909 / 1600", "images/book-597.jpg": "1116 / 1600", "images/book-598.jpg": "1160 / 1600", "images/book-599.jpg": "1085 / 1600", "images/book-600.jpg": "1577 / 1600", "images/book-601.jpg": "1600 / 1494", "images/book-602.jpg": "1600 / 1482", "images/book-603.jpg": "1400 / 1600", "images/book-604.jpg": "1452 / 1600", "images/book-605.jpg": "1155 / 1600", "images/book-606.jpg": "983 / 1600", "images/book-607.jpg": "1073 / 1600", "images/book-608.jpg": "1600 / 1470", "images/book-609.jpg": "908 / 1600", "images/book-610.jpg": "1600 / 1476", "images/book-507.jpg": "1600 / 1105"};
+    const IMG_ASPECT = {"images/book-004.jpg": "1070 / 1600", "images/book-005.jpg": "940 / 1172", "images/book-006-front.jpg": "1015 / 1588", "images/book-006-spine.jpg": "247 / 1588", "images/book-007.jpg": "945 / 1600", "images/book-009.jpg": "600 / 422", "images/book-010-front.jpg": "1600 / 730", "images/book-011-front.jpg": "1600 / 631", "images/book-012.jpg": "426 / 600", "images/book-013.jpg": "908 / 1600", "images/book-014.jpg": "895 / 1600", "images/book-015.jpg": "600 / 492", "images/book-016.jpg": "976 / 1600", "images/book-017-front.jpg": "1600 / 1023", "images/book-018.jpg": "1020 / 1600", "images/book-019.jpg": "1016 / 1600", "images/book-020-front.jpg": "774 / 1600", "images/book-021.jpg": "1001 / 1600", "images/book-022-front.jpg": "1600 / 1327", "images/book-023-front.jpg": "1121 / 1600", "images/book-024-front.jpg": "893 / 1600", "images/book-025.jpg": "532 / 600", "images/book-026-front.jpg": "1600 / 786", "images/book-028-front.jpg": "1600 / 858", "images/book-030-front.jpg": "1600 / 658", "images/book-033.jpg": "260 / 416", "images/book-034.jpg": "600 / 277", "images/book-035.jpg": "650 / 550", "images/book-036.jpg": "947 / 1600", "images/book-037.jpg": "958 / 1600", "images/book-038.jpg": "340 / 600", "images/book-039-front.jpg": "1455 / 1600", "images/book-040.jpg": "982 / 1600", "images/book-041-front.jpg": "1080 / 930", "images/book-042.jpg": "364 / 600", "images/book-043.jpg": "997 / 1600", "images/book-044-front.jpg": "936 / 1488", "images/book-045-front.jpg": "872 / 1244", "images/book-046-front.jpg": "959 / 1589", "images/book-047-front.jpg": "863 / 1600", "images/book-048.jpg": "650 / 548", "images/book-049.jpg": "650 / 531", "images/book-050.jpg": "650 / 708", "images/book-051-front.jpg": "329 / 1254", "images/book-052.jpg": "650 / 1095", "images/book-053-front.jpg": "1080 / 1051", "images/book-054.jpg": "650 / 1042", "images/book-055-front.jpg": "987 / 458", "images/book-056.jpg": "961 / 1600", "images/book-059.jpg": "966 / 1600", "images/book-060.jpg": "1009 / 1600", "images/book-061.jpg": "1004 / 1600", "images/book-062.jpg": "980 / 1600", "images/book-063.jpg": "1080 / 1559", "images/book-066.jpg": "1160 / 1600", "images/book-067.jpg": "342 / 600", "images/book-068.jpg": "980 / 1600", "images/book-069.jpg": "600 / 469", "images/book-070.jpg": "600 / 564", "images/book-071.jpg": "600 / 456", "images/book-072.jpg": "600 / 552", "images/book-073.jpg": "979 / 1600", "images/book-074.jpg": "398 / 600", "images/book-075.jpg": "319 / 600", "images/book-076-front.jpg": "1062 / 1600", "images/book-077.jpg": "414 / 600", "images/book-078.jpg": "407 / 600", "images/book-079.jpg": "393 / 600", "images/book-080.jpg": "421 / 600", "images/book-081.jpg": "351 / 599", "images/book-082.jpg": "980 / 1600", "images/book-083.jpg": "458 / 600", "images/book-084.jpg": "404 / 600", "images/book-085.jpg": "452 / 600", "images/book-086.jpg": "600 / 478", "images/book-087.jpg": "600 / 423", "images/book-088.jpg": "403 / 600", "images/book-089.jpg": "600 / 412", "images/book-090.jpg": "600 / 469", "images/book-091.jpg": "440 / 600", "images/book-092.jpg": "600 / 401", "images/book-093.jpg": "600 / 563", "images/book-094.jpg": "402 / 600", "images/book-095.jpg": "650 / 1162", "images/book-096.jpg": "1600 / 1404", "images/book-097.jpg": "415 / 600", "images/book-098-front.jpg": "688 / 1600", "images/book-099.jpg": "1009 / 1556", "images/book-100.jpg": "650 / 972", "images/book-101.jpg": "650 / 1009", "images/book-102.jpg": "499 / 600", "images/book-103.jpg": "650 / 964", "images/book-104.jpg": "260 / 343", "images/book-106-front.jpg": "1080 / 1156", "images/book-107-front.jpg": "949 / 1600", "images/book-108-front.jpg": "1167 / 1600", "images/book-109-front.jpg": "611 / 614", "images/book-110-front.jpg": "1468 / 1599", "images/book-111-front.jpg": "1056 / 1736", "images/book-112-front.jpg": "1266 / 1600", "images/book-113.jpg": "868 / 1600", "images/book-114-front.jpg": "828 / 1600", "images/book-115.jpg": "1154 / 1600", "images/book-116-front.jpg": "701 / 1600", "images/book-117.jpg": "980 / 1600", "images/book-118.jpg": "1182 / 1600", "images/book-119.jpg": "1098 / 1600", "images/book-120-front.jpg": "963 / 1600", "images/book-121-front.jpg": "659 / 1600", "images/book-122.jpg": "1124 / 1600", "images/book-123-front.jpg": "1227 / 1600", "images/book-124.jpg": "1565 / 1600", "images/book-125.jpg": "1600 / 616", "images/book-126-front.jpg": "798 / 1600", "images/book-127.jpg": "347 / 600", "images/book-128-front.jpg": "1370 / 1600", "images/book-129.jpg": "1029 / 1600", "images/book-130-front.jpg": "1600 / 1011", "images/book-131-front.jpg": "1464 / 1600", "images/book-132-front.jpg": "1349 / 1599", "images/book-133-front.jpg": "1245 / 1600", "images/book-134-front.jpg": "1434 / 1599", "images/book-135-front.jpg": "1390 / 1599", "images/book-136-front.jpg": "1600 / 1575", "images/book-137.jpg": "1347 / 1600", "images/book-138.jpg": "1501 / 1600", "images/book-139.jpg": "927 / 1134", "images/book-140.jpg": "1292 / 1600", "images/book-141.jpg": "1135 / 1600", "images/book-142.jpg": "650 / 780", "images/book-143.jpg": "1067 / 1600", "images/book-144.jpg": "1146 / 1600", "images/book-145.jpg": "1102 / 1600", "images/book-146.jpg": "650 / 869", "images/book-147.jpg": "650 / 894", "images/book-148.jpg": "448 / 600", "images/book-149.jpg": "650 / 460", "images/book-150.jpg": "1164 / 1600", "images/book-151-front.jpg": "1248 / 1600", "images/book-152.jpg": "650 / 669", "images/book-153.jpg": "650 / 787", "images/book-154.jpg": "650 / 882", "images/book-155.jpg": "650 / 809", "images/book-156.jpg": "650 / 818", "images/book-157.jpg": "650 / 949", "images/book-159.jpg": "650 / 871", "images/book-160.jpg": "650 / 776", "images/book-161.jpg": "650 / 1117", "images/book-162.jpg": "650 / 787", "images/book-163.jpg": "1168 / 1600", "images/book-164.jpg": "1265 / 1600", "images/book-165.jpg": "1019 / 1600", "images/book-166.jpg": "1226 / 1600", "images/book-167.jpg": "1080 / 1600", "images/book-169.jpg": "1053 / 1600", "images/book-172.jpg": "1600 / 1485", "images/book-173.jpg": "650 / 600", "images/book-174.jpg": "650 / 1053", "images/book-175.jpg": "650 / 1071", "images/book-176.jpg": "650 / 1028", "images/book-177.jpg": "650 / 957", "images/book-178.jpg": "650 / 1024", "images/book-179.jpg": "650 / 1049", "images/book-180.jpg": "650 / 1176", "images/book-181.jpg": "650 / 913", "images/book-182.jpg": "650 / 1089", "images/book-183.jpg": "650 / 670", "images/book-184.jpg": "650 / 705", "images/book-185.jpg": "650 / 544", "images/book-186.jpg": "650 / 1041", "images/book-187.jpg": "650 / 1010", "images/book-188.jpg": "650 / 516", "images/book-189.jpg": "650 / 897", "images/book-190.jpg": "650 / 647", "images/book-191.jpg": "650 / 634", "images/book-192.jpg": "650 / 1057", "images/book-193.jpg": "650 / 1039", "images/book-194.jpg": "650 / 941", "images/book-195.jpg": "650 / 874", "images/book-196.jpg": "650 / 897", "images/book-197.jpg": "650 / 943", "images/book-198.jpg": "650 / 879", "images/book-199.jpg": "650 / 1130", "images/book-200.jpg": "650 / 853", "images/book-201.jpg": "650 / 858", "images/book-202.jpg": "650 / 935", "images/book-203.jpg": "650 / 857", "images/book-204.jpg": "650 / 856", "images/book-205.jpg": "650 / 934", "images/book-206.jpg": "650 / 1096", "images/book-207.jpg": "650 / 1135", "images/book-208.jpg": "650 / 895", "images/book-209.jpg": "650 / 1020", "images/book-210.jpg": "650 / 1104", "images/book-211.jpg": "650 / 1037", "images/book-212.jpg": "650 / 894", "images/book-213.jpg": "650 / 1077", "images/book-214.jpg": "650 / 1049", "images/book-215.jpg": "650 / 842", "images/book-216.jpg": "650 / 1099", "images/book-217.jpg": "650 / 1081", "images/book-218.jpg": "1004 / 1600", "images/book-219.jpg": "1008 / 1600", "images/book-220.jpg": "966 / 1600", "images/book-221.jpg": "991 / 1600", "images/book-222.jpg": "934 / 1600", "images/book-223.jpg": "1384 / 1599", "images/book-224.jpg": "969 / 1600", "images/book-225.jpg": "1168 / 1600", "images/book-226.jpg": "955 / 1600", "images/book-227.jpg": "980 / 1600", "images/book-228.jpg": "1032 / 1600", "images/book-229.jpg": "1217 / 1600", "images/book-230.jpg": "974 / 1600", "images/book-231.jpg": "969 / 1600", "images/book-232.jpg": "971 / 1600", "images/book-233.jpg": "1035 / 1600", "images/book-234.jpg": "969 / 1600", "images/book-235.jpg": "931 / 1600", "images/book-236.jpg": "973 / 1600", "images/book-237.jpg": "1067 / 1600", "images/book-238.jpg": "994 / 1600", "images/book-239.jpg": "1149 / 1600", "images/book-240.jpg": "1004 / 1600", "images/book-241.jpg": "1528 / 1600", "images/book-242.jpg": "974 / 1600", "images/book-243.jpg": "1009 / 1600", "images/book-244.jpg": "1010 / 1600", "images/book-245.jpg": "975 / 1600", "images/book-246.jpg": "1185 / 1600", "images/book-247.jpg": "974 / 1600", "images/book-248.jpg": "1205 / 1600", "images/book-249.jpg": "947 / 1600", "images/book-250.jpg": "1112 / 1600", "images/book-251.jpg": "1123 / 1600", "images/book-252.jpg": "1493 / 1600", "images/book-253.jpg": "982 / 1600", "images/book-254.jpg": "1030 / 1600", "images/book-255.jpg": "984 / 1600", "images/book-256.jpg": "1092 / 1600", "images/book-257.jpg": "962 / 1600", "images/book-258.jpg": "955 / 1600", "images/book-259.jpg": "985 / 1600", "images/book-260.jpg": "999 / 1600", "images/book-261.jpg": "953 / 1600", "images/book-262.jpg": "812 / 1600", "images/book-509.jpg": "970 / 1600", "images/book-450.jpg": "977 / 1600", "images/book-510.jpg": "969 / 1600", "images/book-511.jpg": "1004 / 1600", "images/book-512.jpg": "899 / 1600", "images/book-513.jpg": "969 / 1600", "images/book-514.jpg": "1022 / 1600", "images/book-515.jpg": "963 / 1600", "images/book-516.jpg": "935 / 1600", "images/book-517.jpg": "1151 / 1600", "images/book-518.jpg": "968 / 1600", "images/book-519.jpg": "989 / 1600", "images/book-520.jpg": "928 / 1600", "images/book-521.jpg": "1053 / 1600", "images/book-522.jpg": "1001 / 1600", "images/book-523.jpg": "990 / 1600", "images/book-524.jpg": "945 / 1600", "images/book-525.jpg": "921 / 1600", "images/book-526.jpg": "988 / 1600", "images/book-527.jpg": "867 / 1600", "images/book-528.jpg": "1161 / 1600", "images/book-529.jpg": "941 / 1600", "images/book-530.jpg": "958 / 1600", "images/book-531.jpg": "892 / 1600", "images/book-532.jpg": "1379 / 1600", "images/book-533.jpg": "1600 / 1124", "images/book-534.jpg": "1532 / 1599", "images/book-535.jpg": "1600 / 1095", "images/book-536.jpg": "1046 / 1600", "images/book-537.jpg": "958 / 1600", "images/book-538.jpg": "922 / 1600", "images/book-539.jpg": "987 / 1600", "images/book-540.jpg": "1058 / 1600", "images/book-541.jpg": "1001 / 1600", "images/book-542.jpg": "1599 / 1384", "images/book-543.jpg": "996 / 1600", "images/book-544.jpg": "1006 / 1600", "images/book-545.jpg": "1014 / 1600", "images/book-546.jpg": "1007 / 1600", "images/book-547.jpg": "1004 / 1600", "images/book-548.jpg": "1010 / 1600", "images/book-549.jpg": "1019 / 1600", "images/book-550.jpg": "1012 / 1600", "images/book-551.jpg": "1007 / 1600", "images/book-552.jpg": "934 / 1600", "images/book-553.jpg": "1003 / 1600", "images/book-554.jpg": "1050 / 1600", "images/book-555.jpg": "1054 / 1600", "images/book-556.jpg": "1016 / 1600", "images/book-557.jpg": "993 / 1600", "images/book-558.jpg": "959 / 1600", "images/book-559.jpg": "996 / 1600", "images/book-560.jpg": "1065 / 1600", "images/book-561.jpg": "952 / 1600", "images/book-562.jpg": "933 / 1600", "images/book-563.jpg": "971 / 1600", "images/book-564.jpg": "1096 / 1600", "images/book-565.jpg": "944 / 1600", "images/book-566.jpg": "972 / 1600", "images/book-567.jpg": "944 / 1600", "images/book-568.jpg": "1600 / 1101", "images/book-569.jpg": "884 / 1600", "images/book-570.jpg": "929 / 1600", "images/book-571.jpg": "1097 / 1600", "images/book-572.jpg": "954 / 1600", "images/book-573.jpg": "1058 / 1600", "images/book-574.jpg": "993 / 1600", "images/book-575.jpg": "982 / 1600", "images/book-576.jpg": "993 / 1600", "images/book-577.jpg": "1109 / 1600", "images/book-578.jpg": "1402 / 1600", "images/book-579.jpg": "1600 / 1441", "images/book-580.jpg": "1008 / 1600", "images/book-581.jpg": "958 / 1600", "images/book-582.jpg": "1227 / 1599", "images/book-583.jpg": "922 / 1600", "images/book-584.jpg": "991 / 1600", "images/book-585.jpg": "925 / 1600", "images/book-586.jpg": "948 / 1600", "images/book-587.jpg": "984 / 1600", "images/book-588.jpg": "1288 / 1599", "images/book-589.jpg": "1004 / 1600", "images/book-590.jpg": "975 / 1600", "images/book-591.jpg": "962 / 1600", "images/book-592.jpg": "1485 / 1600", "images/book-593.jpg": "983 / 1600", "images/book-594.jpg": "1041 / 1600", "images/book-595.jpg": "941 / 1600", "images/book-596.jpg": "909 / 1600", "images/book-597.jpg": "1116 / 1600", "images/book-598.jpg": "1160 / 1600", "images/book-599.jpg": "1085 / 1600", "images/book-600.jpg": "1577 / 1600", "images/book-601.jpg": "1600 / 1494", "images/book-602.jpg": "1600 / 1482", "images/book-603.jpg": "1400 / 1600", "images/book-604.jpg": "1452 / 1600", "images/book-605.jpg": "1155 / 1600", "images/book-606.jpg": "983 / 1600", "images/book-607.jpg": "1073 / 1600", "images/book-608.jpg": "1600 / 1470", "images/book-609.jpg": "908 / 1600", "images/book-610.jpg": "1600 / 1476", "images/book-507.jpg": "1600 / 1105", "images/book-640.jpg": "944 / 1600", "images/book-641.jpg": "1021 / 1600", "images/book-642.jpg": "1448 / 1599", "images/book-643.jpg": "1234 / 1600", "images/book-644.jpg": "1600 / 1099", "images/book-645.jpg": "1014 / 1600", "images/book-646.jpg": "1023 / 1600", "images/book-647.jpg": "1008 / 1600", "images/book-648.jpg": "988 / 1600", "images/book-649.jpg": "1158 / 1600", "images/book-650.jpg": "969 / 1600", "images/book-651.jpg": "1030 / 1600", "images/book-652.jpg": "1028 / 1600", "images/book-653.jpg": "998 / 1600", "images/book-654.jpg": "922 / 1600", "images/book-655.jpg": "1002 / 1600", "images/book-656.jpg": "1440 / 1600", "images/book-657.jpg": "1323 / 1600", "images/book-658.jpg": "989 / 1600"};
     const FALLBACK_ASPECT = "2 / 3";
     const MAJALIS_COVER = "images/book-004.jpg";
     const QAMOOS_COVER = "images/book-005.jpg";
@@ -3874,7 +3874,38 @@
     { title:"Kalimatul Qur'an: A Dictionary of the Qur'anic Words", urdu:"كلمات القرآن", author:"comp. Ash-Shaikh Hasanin Muhammad Makhluf", cat:"Dictionaries / Grammar & Language Studies", meta:"English", img:"images/book-637.jpg", bg:"#1a4a4a" },
     { title:"Kitabun Nikah with Nikah the Islamic Marriage", urdu:"کتاب النکاح", author:"comp. Maulana Zahir Ahmad Ragie", cat:"Fiqh & Fatawa", meta:"English", img:"images/book-638.jpg", bg:"#1a5a2a" },
     { title:"Memaar-e-Fiqh-e-Hanafi", urdu:"معمار فقہ حنفی", author:"Habib-ul-Ummat Arif Billah Hazrat Maulana Mufti Habibullah Qasmi, khalifa wa mujaz Hazrat Mufti Mahmood Hasan Gangohi wa Hazrat Maulana Abdul Haleem Jaunpuri", cat:"Fiqh & Fatawa", meta:"Single volume · Urdu", img:"images/book-639.jpg", bg:"#5a2e6a" },
+
+    // ── 19 new entries added [2026-09-26] ──
+    { title:"Shariah, Not Ignorance (Shari'at ya Jihalat)", author:"Muhammad Palan Haqqani Gujrati", cat:"Fiqh & Fatawa", meta:"Single volume · English", img:"images/book-640.jpg", bg:"#a9853a" },
+    { title:"Six Points of Tabligh (Chhe Baatein)", author:"Maulana Mohammad Ilyas (late); trans. Maulana Sadruddin Amir Ansari", cat:"Tasawwuf & Spirituality", meta:"Single volume · English", img:"images/book-641.jpg", bg:"#9d7d4a" },
+    { title:"The Muwatta of Imam Malik", author:"Imam Malik b. Anas (95–179 AH); narrated by Yahya b. Yahya b. Kathir al-Laith al-Andalusi", cat:"Hadith & Sunnah", meta:"Single volume · English", img:"images/book-642.jpg", bg:"#c9a968" },
+    { title:"Perform Salah Correctly", author:"Mufti Muhammad Taqi Usmani", cat:"Namaz, Dua & Wazaif", meta:"Single volume · English", img:"images/book-643.jpg", bg:"#b8883a" },
+    { title:"Tafheem Al Bukhari — The Translation and Commentary of the Meaning of Sahih Al-Bukhari", author:"Imam Abu Abdullah Muhammad bin Ismail Bukhari; commentary Maulana Zahoor ul Baari Aazami", cat:"Hadith & Sunnah", meta:"4 volumes · Arabic-English", img:"images/book-644.jpg", bg:"#c9a968" },
+    { title:"One Hundred Wretched People", author:"Sayyid Muhammad Abdur Rahim", cat:"Seerah & History", meta:"Single volume · English", img:"images/book-645.jpg", bg:"#b8883a" },
+    { title:"Regulations Concerning Sajda-e-Sahw", author:"Mufti Habeebur Rahman Muradabadi", cat:"Fiqh & Fatawa", meta:"Single volume · English", img:"images/book-646.jpg", bg:"#a9853a" },
+    { title:"Religion and Science", author:"Maulana Wahiduddin Khan; trans. Dr. Farida Khanam", cat:"Tasawwuf & Spirituality", meta:"Single volume · English", img:"images/book-647.jpg", bg:"#9d7d4a" },
+    { title:"Miracles of the Holy Prophet ﷺ", author:"Ibn Kathir Ad-Damishiqi (700–774 AH)", cat:"Seerah & History", meta:"Single volume · English", img:"images/book-648.jpg", bg:"#b8883a" },
+    { title:"Sayings of the Prophet ﷺ", author:"Justice Mufti Muhammad Taqi Usmani", cat:"Hadith & Sunnah", meta:"Single volume · English", img:"images/book-649.jpg", bg:"#c9a968" },
+    { title:"One Hundred Ascetics and Their Chief Muhammad ﷺ", author:"Muhammad Siddiq al-Manshawi", cat:"Tasawwuf & Spirituality", meta:"Single volume · English", img:"images/book-650.jpg", bg:"#9d7d4a" },
+    { title:"Quranic Stories of Women", author:"Darul Ishaat", cat:"Women", meta:"Single volume · English", img:"images/book-651.jpg", bg:"#b8883a" },
+    { title:"Munajaate Maqbul — A Collection of Accepted Supplications", author:"comp. Hakimul Ummah Maulana Ashraf Ali Thanvi", cat:"Namaz, Dua & Wazaif", meta:"Single volume · English", img:"images/book-652.jpg", bg:"#b8883a" },
+    { title:"Shari'ah and Tariqat: Inseparable and Indivisible", author:"Sheikh-ul-Hadith Maulana Muhammad Zakariya", cat:"Tasawwuf & Spirituality", meta:"Single volume · English", img:"images/book-653.jpg", bg:"#9d7d4a" },
+    { title:"Reasons of Revelation of the Glorious Quran", author:"Abu Al-Hassan Ali Ibn Ahmad Al-Wahidi An-Naisaburi", cat:"Qur'an & Tafseer", meta:"Single volume · English", img:"images/book-654.jpg", bg:"#d4a574" },
+    { title:"Muhammad in the Bible", author:"Prof. Abdul Ahad Dawud (former Bishop of Uramiah)", cat:"Seerah & History", meta:"Single volume · English", img:"images/book-655.jpg", bg:"#b8883a" },
+    { title:"Tareeq us Saalikeen — Translation and Detailed Explanation of Riyadh us Saaliheen (Gardens of the Righteous)", author:"Imam Abu Zakariya Yahya bin Sharaf An-Nawawi; trans./comm. Maulana (Dr) Sajid ur Rahman Siddiqui; hadith trans. Muhammad Sagheer Hasan Masumi", cat:"Hadith & Sunnah", meta:"2 volumes · English", img:"images/book-656.jpg", bg:"#c9a968" },
+    { title:"The Muwatta of Imam Muhammad", author:"Muhammad ibn al-Hasan Ash-Shaybani (135H–189H)", cat:"Hadith & Sunnah", meta:"Single volume · English", img:"images/book-657.jpg", bg:"#c9a968" },
+    { title:"Sins That Produce Nothing (Gunah be Lazzat)", author:"Late Mufti-i-Azam of Pakistan Maulana Muhammad Shafi; trans. Jamil Naqvi", cat:"Tasawwuf & Spirituality", meta:"Single volume · English", img:"images/book-658.jpg", bg:"#9d7d4a" },
   ];
+
+  // Defensive guard: CATALOGUE is a literal array above, but if a future
+  // edit ever turns it into something else (or a merge conflict corrupts
+  // it), fail loudly in the console and fall back to an empty catalogue
+  // instead of crashing every function below that assumes an array.
+  if(!Array.isArray(CATALOGUE)){
+    console.error('CATALOGUE data is missing or malformed — expected an array of books.');
+  }
+  // Exposed on window for easy inspection/debugging in the browser console.
+  window.CATALOGUE = Array.isArray(CATALOGUE) ? CATALOGUE : [];
 
   // Normalize every written variation of "Durood Shareef" (Arabic, Urdu,
   // and English abbreviations) to the single calligraphic ligature glyph.
@@ -3894,6 +3925,7 @@
       .replace(/\(pbuh\)/gi, 'ﷺ');
   }
   CATALOGUE.forEach(b => {
+    if(!b) return;
     b.title = normalizeDurood(b.title);
     b.urdu = normalizeDurood(b.urdu);
     b.author = normalizeDurood(b.author);
@@ -4095,95 +4127,123 @@
   }
 
   function matchesActiveFilter(b){
+    // Defensive: a malformed/incomplete book entry should never throw —
+    // it should just fail to match instead of crashing the whole render.
+    if(!b) return false;
+    const meta = b?.meta || '';
+    const title = b?.title || '';
+    const urdu = b?.urdu || '';
+    const cat = b?.cat || '';
     if(activeFilter === 'all') return true;
-    if(activeFilter === '__english__') return b.meta.includes('English');
-    if(activeFilter === '__arabic__') return b.meta.includes('Arabic') && !b.meta.includes('Urdu') && !b.meta.includes('English');
-    if(activeFilter === '__sets__') return /\b([2-9]|\d{2,})\s+volumes\b/i.test(b.meta);
-    if(activeFilter === '__twocolor__') return !!b.twoColor;
-    if(activeFilter === '__fourcolor__') return !!b.fourColor;
-    if(activeFilter === '__importedpaper__') return /\b([2-9]|\d{2,})\s+volumes\b/i.test(b.meta) || b.meta.includes('English');
-    if(activeFilter === '__shuruhat__') return /\bsharh\b/i.test(b.title) || /شرح/.test(b.urdu);
-    if(activeFilter === '__hajjramadan__') return /\b(hajj|umrah|umra|ziyarat|ramadan|ramzan|fasting|zakat|zakaat|zakah|zakaah)\b/i.test(b.title + ' ' + b.meta) || /\broza\b(?!-)/i.test(b.title + ' ' + b.meta) || /(?<![\u0600-\u06FF])(حج|عمرہ|زیارت|رمضان|روزہ|روزے|زکوٰۃ|زکات|زکاۃ|زکوة)(?![\u0600-\u06FF])/.test(b.urdu);
-    if(activeFilter === '__qissas__') return /\b(qissas|qisas|stories|story|kahani|kahaniyan)\b/i.test(b.title + ' ' + b.meta) || /(?<![\u0600-\u06FF])(قصص|کہانی|کہانیاں)(?![\u0600-\u06FF])/.test(b.urdu);
-    return b.cat === activeFilter;
+    if(activeFilter === '__english__') return meta.includes('English');
+    if(activeFilter === '__arabic__') return meta.includes('Arabic') && !meta.includes('Urdu') && !meta.includes('English');
+    if(activeFilter === '__sets__') return /\b([2-9]|\d{2,})\s+volumes\b/i.test(meta);
+    if(activeFilter === '__twocolor__') return !!b?.twoColor;
+    if(activeFilter === '__fourcolor__') return !!b?.fourColor;
+    if(activeFilter === '__importedpaper__') return /\b([2-9]|\d{2,})\s+volumes\b/i.test(meta) || meta.includes('English');
+    if(activeFilter === '__shuruhat__') return /\bsharh\b/i.test(title) || /شرح/.test(urdu);
+    if(activeFilter === '__hajjramadan__') return /\b(hajj|umrah|umra|ziyarat|ramadan|ramzan|fasting|zakat|zakaat|zakah|zakaah)\b/i.test(title + ' ' + meta) || /\broza\b(?!-)/i.test(title + ' ' + meta) || /(?<![\u0600-\u06FF])(حج|عمرہ|زیارت|رمضان|روزہ|روزے|زکوٰۃ|زکات|زکاۃ|زکوة)(?![\u0600-\u06FF])/.test(urdu);
+    if(activeFilter === '__qissas__') return /\b(qissas|qisas|stories|story|kahani|kahaniyan)\b/i.test(title + ' ' + meta) || /(?<![\u0600-\u06FF])(قصص|کہانی|کہانیاں)(?![\u0600-\u06FF])/.test(urdu);
+    // Case-insensitive category match so a stray casing difference in
+    // newly-added data (e.g. "fiqh & fatawa" vs "Fiqh & Fatawa") still filters correctly.
+    return String(cat).toLowerCase() === String(activeFilter).toLowerCase();
   }
 
   function getFilteredBooks(){
-    const q = normalizeSearchText(catSearch.value.trim());
-    const qWords = q.split(' ').filter(w => w.length > 1);
-    let filtered = CATALOGUE.filter(b => {
-      const matchesFilter = matchesActiveFilter(b);
-      const haystack = normalizeSearchText(b.title + ' ' + b.urdu + ' ' + b.author + ' ' + b.cat);
-      // Word-level match: every word in the query just needs to appear
-      // somewhere in the haystack. This is far more forgiving of speech
-      // recognition mistakes (extra/missing/reordered/misheard words)
-      // than requiring the whole phrase as one exact substring.
-      const matchesQuery = !q || (qWords.length ? qWords.every(w => haystack.includes(w)) : haystack.includes(q));
-      return matchesFilter && matchesQuery;
-    });
+    // Defensive wrapper: any unexpected shape in CATALOGUE or a search/DOM
+    // failure should degrade to "no results" rather than crashing the page.
+    try {
+      if(!Array.isArray(CATALOGUE)){
+        console.error('CATALOGUE is missing or not an array — cannot filter books.');
+        return [];
+      }
 
-    // Fuzzy fallback: if the strict pass found nothing but there was a real
-    // query, retry allowing each query word to fuzzy-match (small edit
-    // distance) against individual words in the haystack. Catches cases
-    // where voice recognition badly mangled one word (e.g. "Bahishti" -> "Bishti").
-    if(!filtered.length && qWords.length){
-      filtered = CATALOGUE.filter(b => {
+      const q = normalizeSearchText((catSearch?.value || '').trim());
+      const qWords = q.split(' ').filter(w => w.length > 1);
+
+      const haystackOf = b => normalizeSearchText(
+        `${b?.title || ''} ${b?.urdu || ''} ${b?.author || ''} ${b?.cat || ''}`
+      );
+
+      let filtered = CATALOGUE.filter(b => {
+        if(!b) return false;
         const matchesFilter = matchesActiveFilter(b);
-        const haystack = normalizeSearchText(b.title + ' ' + b.urdu + ' ' + b.author + ' ' + b.cat);
-        const haystackWords = haystack.split(' ').filter(Boolean);
-        const matchesQuery = qWords.every(w => fuzzyWordMatch(w, haystackWords));
+        const haystack = haystackOf(b);
+        // Word-level match: every word in the query just needs to appear
+        // somewhere in the haystack. This is far more forgiving of speech
+        // recognition mistakes (extra/missing/reordered/misheard words)
+        // than requiring the whole phrase as one exact substring.
+        const matchesQuery = !q || (qWords.length ? qWords.every(w => haystack.includes(w)) : haystack.includes(q));
         return matchesFilter && matchesQuery;
       });
-    }
 
-    // Whole-title fuzzy fallback: voice recognition sometimes shifts word
-    // boundaries as well as individual letters (e.g. "Nukhbat-ul-Masail"
-    // heard as "naubatul missile") — no per-word alignment exists in that
-    // case, so compare the entire query against each book's TITLE as one
-    // flattened string. Restricted to the title only (not author/category)
-    // and gated to longer queries, so a short/partial typed query like
-    // "darloom" can't loosely match dozens of unrelated books.
-    const qFlat = q.replace(/\s+/g, '');
-    if(!filtered.length && qFlat.length >= 10){
-      filtered = CATALOGUE.filter(b => {
-        if(!matchesActiveFilter(b)) return false;
-        const hFlat = normalizeSearchText(b.title).replace(/\s+/g, '');
-        if(!hFlat) return false;
-        // Slide the query length across the title so a shorter/longer
-        // misheard query still compares fairly against a same-length
-        // window instead of being penalized for the length difference.
-        const win = Math.min(hFlat.length, qFlat.length);
-        let best = Infinity;
-        for(let i = 0; i + win <= hFlat.length; i++){
-          const dist = levenshtein(qFlat, hFlat.slice(i, i + win));
-          if(dist < best) best = dist;
-        }
-        return best <= Math.ceil(win * 0.3);
-      });
-    }
-
-    // Default sorting: surface multi-volume sets, larger sets, and
-    // comprehensive works first on every tab, including "All" — sort by
-    // volume/set count descending, then alphabetically by title as a
-    // stable tie-breaker (the catalogue has no price field to sort by).
-    filtered = filtered.slice().sort((a, b) => {
-      const va = getVolumeCount(a.meta), vb = getVolumeCount(b.meta);
-      if(vb !== va) return vb - va;
-      return a.title.localeCompare(b.title);
-    });
-
-    // Pinned exception: on the 4-Color Printing tab specifically, Ilmi
-    // Kashkol (Thamarat-ul-Awraq) always leads, ahead of the normal
-    // volume-count sort above.
-    if(activeFilter === '__fourcolor__'){
-      const idx = filtered.findIndex(b => b.title.includes('Ilmi Kashkol'));
-      if(idx > 0){
-        const [pinned] = filtered.splice(idx, 1);
-        filtered.unshift(pinned);
+      // Fuzzy fallback: if the strict pass found nothing but there was a real
+      // query, retry allowing each query word to fuzzy-match (small edit
+      // distance) against individual words in the haystack. Catches cases
+      // where voice recognition badly mangled one word (e.g. "Bahishti" -> "Bishti").
+      if(!filtered.length && qWords.length){
+        filtered = CATALOGUE.filter(b => {
+          if(!b) return false;
+          const matchesFilter = matchesActiveFilter(b);
+          const haystack = haystackOf(b);
+          const haystackWords = haystack.split(' ').filter(Boolean);
+          const matchesQuery = qWords.every(w => fuzzyWordMatch(w, haystackWords));
+          return matchesFilter && matchesQuery;
+        });
       }
-    }
 
-    return filtered;
+      // Whole-title fuzzy fallback: voice recognition sometimes shifts word
+      // boundaries as well as individual letters (e.g. "Nukhbat-ul-Masail"
+      // heard as "naubatul missile") — no per-word alignment exists in that
+      // case, so compare the entire query against each book's TITLE as one
+      // flattened string. Restricted to the title only (not author/category)
+      // and gated to longer queries, so a short/partial typed query like
+      // "darloom" can't loosely match dozens of unrelated books.
+      const qFlat = q.replace(/\s+/g, '');
+      if(!filtered.length && qFlat.length >= 10){
+        filtered = CATALOGUE.filter(b => {
+          if(!b || !matchesActiveFilter(b)) return false;
+          const hFlat = normalizeSearchText(b?.title || '').replace(/\s+/g, '');
+          if(!hFlat) return false;
+          // Slide the query length across the title so a shorter/longer
+          // misheard query still compares fairly against a same-length
+          // window instead of being penalized for the length difference.
+          const win = Math.min(hFlat.length, qFlat.length);
+          let best = Infinity;
+          for(let i = 0; i + win <= hFlat.length; i++){
+            const dist = levenshtein(qFlat, hFlat.slice(i, i + win));
+            if(dist < best) best = dist;
+          }
+          return best <= Math.ceil(win * 0.3);
+        });
+      }
+
+      // Default sorting: surface multi-volume sets, larger sets, and
+      // comprehensive works first on every tab, including "All" — sort by
+      // volume/set count descending, then alphabetically by title as a
+      // stable tie-breaker (the catalogue has no price field to sort by).
+      filtered = filtered.slice().sort((a, b) => {
+        const va = getVolumeCount(a?.meta), vb = getVolumeCount(b?.meta);
+        if(vb !== va) return vb - va;
+        return (a?.title || '').localeCompare(b?.title || '');
+      });
+
+      // Pinned exception: on the 4-Color Printing tab specifically, Ilmi
+      // Kashkol (Thamarat-ul-Awraq) always leads, ahead of the normal
+      // volume-count sort above.
+      if(activeFilter === '__fourcolor__'){
+        const idx = filtered.findIndex(b => (b?.title || '').includes('Ilmi Kashkol'));
+        if(idx > 0){
+          const [pinned] = filtered.splice(idx, 1);
+          filtered.unshift(pinned);
+        }
+      }
+
+      return filtered;
+    } catch(err){
+      console.error('getFilteredBooks failed:', err);
+      return [];
+    }
   }
 
   const coverColors = {
@@ -4224,61 +4284,78 @@
   });
 
   function bookCardHTML(b){
-    const colors = coverColors[b.cat] || { main: '#4a4a4a', accent: '#b8883a', text: '#ffffff' };
-    const accent = (b.img && b.bg) ? b.bg : colors.accent;
-    const coverAspect = b.img ? (IMG_ASPECT[b.img] || FALLBACK_ASPECT) : null;
-    // Imported Paper: every multi-volume Set and every English-language
-    // title, per owner instruction. Computed from the same volume-count
-    // regex and language check the Sets/English tabs already use, rather
-    // than a stored per-book flag, so it can never drift out of sync with
-    // what those tabs actually show.
-    const importedPaper = /\b([2-9]|\d{2,})\s+volumes\b/i.test(b.meta) || b.meta.includes('English');
-    return `
-      <div class="book-card" data-book-id="${b.id}">
-        <div class="book-cover-3d${b.img ? ' has-photo' : ''}" style="--cover-main: ${colors.main}; --cover-accent: ${accent};${coverAspect ? ` aspect-ratio:${coverAspect};` : ''}">
-          ${b.img ? `
-          <div class="book-cover-front book-cover-photo">
-            <img src="${b.img}" alt="${b.title}" class="cover-photo-img" loading="lazy" decoding="async" onload="fitCoverPhoto(this)">
-          </div>` : `
-          <div class="book-cover-front">
-            <div class="cover-header" style="background-color: ${colors.main};">
-              <svg class="cover-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8">
-                <path d="M4 19V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/>
-                <polyline points="16 3 16 13 9 10 4 13 4 23"/>
-              </svg>
-            </div>
-            <div class="cover-content">
-              <h4 class="cover-title">${b.title}</h4>
-              ${b.urdu ? `<div class="cover-urdu">${b.urdu}</div>` : ''}
-              <div class="cover-author">${authorLinesHTML(b.author)}</div>
-            </div>
-            <div class="cover-footer" style="background-color: ${colors.accent};">
-              <span class="publisher-name">Darul Ishaat</span>
-            </div>
-          </div>`}
-        </div>
-        <div>
-          <div class="tag-row">
-            <span class="tag">${b.cat}</span>
-            ${b.twoColor ? `<span class="two-color-badge">✨ 2-Color Printing</span>` : ''}
-            ${b.fourColor ? `<span class="four-color-badge"><svg viewBox="0 0 16 16" width="12" height="12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="6" cy="6" r="4.4" fill="currentColor" opacity="0.55"/><circle cx="10.5" cy="6" r="4.4" fill="currentColor" opacity="0.55"/><circle cx="8.25" cy="10" r="4.4" fill="currentColor" opacity="0.55"/></svg> 4-Color Printing</span>` : ''}
-            ${importedPaper ? `<span class="imported-paper-badge">📄 Imported Paper</span>` : ''}
+    // Defensive: never let one malformed book entry break the whole grid.
+    // Missing fields fall back to safe defaults instead of throwing.
+    try {
+      if(!b) return '';
+      const id = b?.id ?? '';
+      const title = b?.title || 'Untitled';
+      const urdu = b?.urdu || '';
+      const author = b?.author || '';
+      const cat = b?.cat || 'Uncategorized';
+      const meta = b?.meta || '';
+      const img = b?.img || '';
+      const bg = b?.bg || '';
+
+      const colors = coverColors[cat] || { main: '#4a4a4a', accent: '#b8883a', text: '#ffffff' };
+      const accent = (img && bg) ? bg : colors.accent;
+      const coverAspect = img ? (IMG_ASPECT[img] || FALLBACK_ASPECT) : null;
+      // Imported Paper: every multi-volume Set and every English-language
+      // title, per owner instruction. Computed from the same volume-count
+      // regex and language check the Sets/English tabs already use, rather
+      // than a stored per-book flag, so it can never drift out of sync with
+      // what those tabs actually show.
+      const importedPaper = /\b([2-9]|\d{2,})\s+volumes\b/i.test(meta) || meta.includes('English');
+      return `
+        <div class="book-card" data-book-id="${id}">
+          <div class="book-cover-3d${img ? ' has-photo' : ''}" style="--cover-main: ${colors.main}; --cover-accent: ${accent};${coverAspect ? ` aspect-ratio:${coverAspect};` : ''}">
+            ${img ? `
+            <div class="book-cover-front book-cover-photo">
+              <img src="${img}" alt="${title}" class="cover-photo-img" loading="lazy" decoding="async" onload="fitCoverPhoto(this)">
+            </div>` : `
+            <div class="book-cover-front">
+              <div class="cover-header" style="background-color: ${colors.main};">
+                <svg class="cover-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8">
+                  <path d="M4 19V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/>
+                  <polyline points="16 3 16 13 9 10 4 13 4 23"/>
+                </svg>
+              </div>
+              <div class="cover-content">
+                <h4 class="cover-title">${title}</h4>
+                ${urdu ? `<div class="cover-urdu">${urdu}</div>` : ''}
+                <div class="cover-author">${authorLinesHTML(author)}</div>
+              </div>
+              <div class="cover-footer" style="background-color: ${colors.accent};">
+                <span class="publisher-name">Darul Ishaat</span>
+              </div>
+            </div>`}
           </div>
-          <h3>${b.title}</h3>
-          ${b.urdu ? `<div class="ur-name">${b.urdu}</div>` : ''}
-          <div class="author">${authorLinesHTML(b.author)}</div>
+          <div>
+            <div class="tag-row">
+              <span class="tag">${cat}</span>
+              ${b?.twoColor ? `<span class="two-color-badge">✨ 2-Color Printing</span>` : ''}
+              ${b?.fourColor ? `<span class="four-color-badge"><svg viewBox="0 0 16 16" width="12" height="12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="6" cy="6" r="4.4" fill="currentColor" opacity="0.55"/><circle cx="10.5" cy="6" r="4.4" fill="currentColor" opacity="0.55"/><circle cx="8.25" cy="10" r="4.4" fill="currentColor" opacity="0.55"/></svg> 4-Color Printing</span>` : ''}
+              ${importedPaper ? `<span class="imported-paper-badge">📄 Imported Paper</span>` : ''}
+            </div>
+            <h3>${title}</h3>
+            ${urdu ? `<div class="ur-name">${urdu}</div>` : ''}
+            <div class="author">${authorLinesHTML(author)}</div>
+          </div>
+          <div class="meta"><span>${meta}</span></div>
+          <div class="cart-controls" data-id="${id}">${cartControlsHTML(id)}</div>
+          <div class="card-delivery-note">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 21s7-6.1 7-11.5A7 7 0 0 0 5 9.5C5 14.9 12 21 12 21z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="12" cy="9.3" r="2.2" stroke="currentColor" stroke-width="1.4"/></svg>
+            <span>Karachi: Same-Day</span>
+            <span class="delivery-sep">&middot;</span>
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3 7h11v9H3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 10h4l3 3v3h-7z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="7" cy="18" r="1.6" stroke="currentColor" stroke-width="1.4"/><circle cx="17.5" cy="18" r="1.6" stroke="currentColor" stroke-width="1.4"/></svg>
+            <span>Pakistan: 3&ndash;4 Days</span>
+          </div>
         </div>
-        <div class="meta"><span>${b.meta}</span></div>
-        <div class="cart-controls" data-id="${b.id}">${cartControlsHTML(b.id)}</div>
-        <div class="card-delivery-note">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 21s7-6.1 7-11.5A7 7 0 0 0 5 9.5C5 14.9 12 21 12 21z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="12" cy="9.3" r="2.2" stroke="currentColor" stroke-width="1.4"/></svg>
-          <span>Karachi: Same-Day</span>
-          <span class="delivery-sep">&middot;</span>
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3 7h11v9H3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 10h4l3 3v3h-7z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="7" cy="18" r="1.6" stroke="currentColor" stroke-width="1.4"/><circle cx="17.5" cy="18" r="1.6" stroke="currentColor" stroke-width="1.4"/></svg>
-          <span>Pakistan: 3&ndash;4 Days</span>
-        </div>
-      </div>
-    `;
+      `;
+    } catch(err){
+      console.error('bookCardHTML failed for book:', b, err);
+      return '';
+    }
   }
 
   // ===== Cart + AI recommendations =====
@@ -4794,12 +4871,28 @@
   }
 
   function renderCatalogue(){
-    const filtered = getFilteredBooks();
-    const toShow = filtered.slice(0, visibleCount);
-    cardGrid.innerHTML = toShow.map(bookCardHTML).join('');
-    updateLoadMoreUI(filtered.length, toShow.length);
-    fitAllCoverPhotos();
-    observeBookCardImpressions();
+    // Wrapped end-to-end: any unexpected failure (missing DOM node, bad
+    // data, etc.) shows the "no books found" fallback instead of leaving
+    // the visitor with a blank/frozen catalogue and a console error.
+    const NO_RESULTS_HTML = `
+      <div class="no-results-message" style="grid-column:1/-1; text-align:center; padding:48px 16px; color:var(--muted,#777);">
+        <p style="font-size:1.1rem; margin:0;">اس زمرے میں کوئی کتاب نہیں ملی</p>
+      </div>`;
+    try {
+      if(!cardGrid) return;
+      const filtered = getFilteredBooks();
+      const toShow = filtered.slice(0, visibleCount);
+      cardGrid.innerHTML = toShow.length ? toShow.map(bookCardHTML).join('') : NO_RESULTS_HTML;
+      updateLoadMoreUI(filtered.length, toShow.length);
+      fitAllCoverPhotos();
+      observeBookCardImpressions();
+    } catch(err){
+      console.error('renderCatalogue failed:', err);
+      if(cardGrid) cardGrid.innerHTML = NO_RESULTS_HTML;
+      if(catCount) catCount.textContent = '';
+      const loadMoreBtn = document.getElementById('loadMoreBtn');
+      if(loadMoreBtn) loadMoreBtn.style.display = 'none';
+    }
   }
 
   // "Top Viewed Books" needs a real view signal, not just clicks — this is
