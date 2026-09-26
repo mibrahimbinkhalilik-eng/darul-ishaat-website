@@ -5554,8 +5554,27 @@
       // work fine on the second try.
       showVoiceStatus('Getting the mic ready…', true);
       voiceBtn.classList.add('listening');
+      // Some Android WebViews/Chrome configurations leave this promise
+      // neither resolving nor rejecting (e.g. mic access silently blocked
+      // by a device policy) — with no timeout, that leaves the button and
+      // status line stuck on "Getting the mic ready…" forever, since
+      // showVoiceStatus was called with persist:true specifically so it
+      // wouldn't auto-clear mid-permission-prompt. Race it against a hard
+      // timeout so the UI always recovers to a normal, usable state even
+      // when the browser itself never calls back.
+      let settled = false;
+      const primingTimeout = setTimeout(() => {
+        if(settled) return;
+        settled = true;
+        priming = false;
+        voiceBtn.classList.remove('listening');
+        showVoiceStatus('Mic didn\u2019t respond — check your browser\u2019s microphone permission');
+      }, 6000);
       navigator.mediaDevices.getUserMedia({ audio: true })
         .then(stream => {
+          if(settled) { stream.getTracks().forEach(t => t.stop()); return; }
+          settled = true;
+          clearTimeout(primingTimeout);
           stream.getTracks().forEach(t => t.stop());
           micPrimed = true;
           priming = false;
@@ -5569,6 +5588,9 @@
           setTimeout(startListening, 250);
         })
         .catch(() => {
+          if(settled) return;
+          settled = true;
+          clearTimeout(primingTimeout);
           // Permission denied or errored — let SpeechRecognition's own
           // onerror handler report it clearly when start() is attempted.
           micPrimed = true;
