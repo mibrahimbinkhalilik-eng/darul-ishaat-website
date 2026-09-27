@@ -1,18 +1,14 @@
-<!DOCTYPE html>;
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- Umami analytics --;
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+<!-- Umami analytics -->
 <script defer src="https://cloud.umami.is/script.js" data-website-id="f8b9212a-1c36-46e3-8d92-ef366fe80f06"></script>
 <title>Darul Ishaat — Publishers of Islamic Books, Karachi, Est. 1950</title>
-<!-- Sentry Error Monitoring -->
-<script src="https://browser.sentry-cdn.com/8.38.0/bundle.min.js" crossorigin="anonymous"></script>
-<script>
-  Sentry.init({
-    dsn: "https://d47eadc2fd1b7650b251adb36cae2cc1@o4512154654736384.ingest.us.sentry.io/4512154726760448"
-  });
-</script>
 
 <!-- PWA / Add to Home Screen -->
 <link rel="manifest" href="manifest.json">
@@ -5563,20 +5559,24 @@
       voiceBtn.classList.add('listening');
       // Some Android WebViews/Chrome configurations leave this promise
       // neither resolving nor rejecting (e.g. mic access silently blocked
-      // by a device policy) — with no timeout, that leaves the button and
-      // status line stuck on "Getting the mic ready…" forever, since
-      // showVoiceStatus was called with persist:true specifically so it
-      // wouldn't auto-clear mid-permission-prompt. Race it against a hard
-      // timeout so the UI always recovers to a normal, usable state even
-      // when the browser itself never calls back.
+      // by a device policy) — with no recovery path, that leaves the
+      // button/status stuck on "Getting the mic ready…" forever, and on
+      // some devices an unresolved getUserMedia prompt also appears to
+      // swallow keyboard input elsewhere on the page (typing into the
+      // search box stops registering characters until the pending mic
+      // request is cleared). cancelPendingMicPriming (defined below) is
+      // the shared recovery path: it's called here on a hard timeout, and
+      // separately the moment the person tries to type instead — so
+      // typing is never left waiting on a hung mic promise.
       let settled = false;
-      const primingTimeout = setTimeout(() => {
+      window.__micPrimingCancel = () => {
         if(settled) return;
         settled = true;
         priming = false;
         voiceBtn.classList.remove('listening');
         showVoiceStatus('Mic didn\u2019t respond — check your browser\u2019s microphone permission');
-      }, 6000);
+      };
+      const primingTimeout = setTimeout(window.__micPrimingCancel, 6000);
       navigator.mediaDevices.getUserMedia({ audio: true })
         .then(stream => {
           if(settled) { stream.getTracks().forEach(t => t.stop()); return; }
@@ -5605,6 +5605,20 @@
           startListening();
         });
     });
+
+    // If a mic-permission request is still pending (priming) or the
+    // recognizer is actively listening the moment someone taps into
+    // either search box, don't make them wait — cancel it immediately so
+    // typing is free the instant they try, instead of only recovering
+    // after the 6s timeout above.
+    function releaseSearchFromMic(){
+      if(priming && window.__micPrimingCancel) window.__micPrimingCancel();
+      if(listening){ try{ recognition.stop(); } catch(err){} }
+    }
+    const catSearchEl = document.getElementById('catSearch');
+    const aiSearchEl = document.getElementById('aiSearchInput');
+    if(catSearchEl) catSearchEl.addEventListener('focus', releaseSearchFromMic);
+    if(aiSearchEl) aiSearchEl.addEventListener('focus', releaseSearchFromMic);
   })();
 
   // Hero "Ask AI" search bar — Enter to search, mic delegates to the main voice button
