@@ -2790,7 +2790,7 @@
         <div style="font-family:'Space Mono', monospace; font-size:0.62rem; letter-spacing:0.06em; color:var(--ink-soft); margin-top:6px; text-transform:uppercase; line-height:2.4; display:inline-block; text-align:left;">Founder — Mufti Muhammad Shafi Usmani Sahab (R.A)<br>Co-Founder (Son) Muhammad Razi Usmani Sahab (R.A)<br>CEO (Grandson) Khalil Ashraf Usmani Sahab</div>
       </div>
 
-      <form class="ai-searchbar" id="heroSearch">
+      <div class="ai-searchbar" id="heroSearch">
         <span class="ai-badge">AI</span>
         <svg class="ai-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
         <input type="text" id="aiSearchInput" placeholder="Ask AI — search any book…" aria-label="Ask AI to search the catalogue">
@@ -2801,7 +2801,7 @@
             <path d="M12 18v3"/>
           </svg>
         </button>
-      </form>
+      </div>
       
       <!-- OUR PRODUCTS BUTTON -->
       <div style="text-align:center; margin-top:20px; margin-bottom:26px; animation:fadeInUp 1.3s ease-out 0.8s backwards;">
@@ -5672,17 +5672,22 @@
       }, 150);
     }
     aiInput.addEventListener('input', syncHeroSearch);
-    if(aiForm){
-      aiForm.addEventListener('submit', (e) => {
-        e.preventDefault(); // this is a search box, not a page navigation
-        syncHeroSearch();
-        if(aiInput.value.trim()){
-          const cat = document.getElementById('catalogue');
-          if(cat) cat.scrollIntoView({ behavior:'smooth', block:'start' });
-          aiInput.blur();
-        }
-      });
-    }
+    // heroSearch is a plain <div> (not a <form>) — some embedded/in-app
+    // browsers mishandle display:flex on <form> elements and silently
+    // fall back to block layout, which broke this bar's row layout while
+    // the (div-based) catalogue search bar rendered fine. So "submit" is
+    // simulated here via Enter keydown on the input instead of a real
+    // form submit event.
+    aiInput.addEventListener('keydown', (e) => {
+      if(e.key !== 'Enter') return;
+      e.preventDefault();
+      syncHeroSearch();
+      if(aiInput.value.trim()){
+        const cat = document.getElementById('catalogue');
+        if(cat) cat.scrollIntoView({ behavior:'smooth', block:'start' });
+        aiInput.blur();
+      }
+    });
 
     // Tap the mic to use voice (if it works on this device/browser)
     if(aiMic && mainVoiceBtn){
