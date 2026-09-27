@@ -5617,8 +5617,21 @@
     }
     const catSearchEl = document.getElementById('catSearch');
     const aiSearchEl = document.getElementById('aiSearchInput');
-    if(catSearchEl) catSearchEl.addEventListener('focus', releaseSearchFromMic);
-    if(aiSearchEl) aiSearchEl.addEventListener('focus', releaseSearchFromMic);
+    // Bound to focus, keydown, AND input (not just focus alone) — belt and
+    // suspenders. releaseSearchFromMic is a cheap no-op once priming/listening
+    // are already false, so firing it on every one of these costs nothing,
+    // but it closes any edge case where a browser's focus-event timing
+    // relative to the first keystroke might otherwise leave a one-tick gap.
+    if(catSearchEl){
+      catSearchEl.addEventListener('focus', releaseSearchFromMic);
+      catSearchEl.addEventListener('keydown', releaseSearchFromMic);
+      catSearchEl.addEventListener('input', releaseSearchFromMic);
+    }
+    if(aiSearchEl){
+      aiSearchEl.addEventListener('focus', releaseSearchFromMic);
+      aiSearchEl.addEventListener('keydown', releaseSearchFromMic);
+      aiSearchEl.addEventListener('input', releaseSearchFromMic);
+    }
   })();
 
   // Hero "Ask AI" search bar — Enter to search, mic delegates to the main voice button
@@ -5918,8 +5931,16 @@
         trackEvent('pwa_sw_registered');
         // Check for a new deploy every time the page loads...
         reg.update().catch(() => {});
-        // ...and periodically while the tab stays open.
+        // ...periodically while the tab stays open...
         setInterval(() => reg.update().catch(() => {}), 60 * 60 * 1000);
+        // ...and whenever the tab comes back into view (phone screen
+        // turned back on, switched back from another app). A tab left
+        // open but backgrounded for hours would otherwise only pick up
+        // a new deploy on the next hourly tick at best — this catches it
+        // the moment the visitor actually returns to look at the page.
+        document.addEventListener('visibilitychange', () => {
+          if(document.visibilityState === 'visible') reg.update().catch(() => {});
+        });
       }).catch((err) => {
         // No service worker = no installability, so this is the earliest
         // possible "install is broken" signal (bad scope, HTTPS issue,
