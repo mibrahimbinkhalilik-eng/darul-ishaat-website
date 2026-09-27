@@ -5648,13 +5648,28 @@
     // non-empty. That fired while the keyboard was still open and the person was
     // still typing, so the page visibly jumped out from under them mid-keystroke.
     // Scrolling now only happens on explicit submit (Enter), not on every input event.
+    //
+    // Bug fix (2026-09-27): this used to call renderCatalogue() synchronously on
+    // every single keystroke, unlike catSearch's own listener which debounces it
+    // (150ms). Re-filtering + rebuilding the whole card grid + re-laying-out every
+    // cover photo on every keystroke was expensive enough on lower-end phones that
+    // it blocked the main thread long enough for the input to visibly stop
+    // accepting/showing typed characters at all ("not typing in search bar") even
+    // though the on-screen keyboard kept working fine. Debounced the render here
+    // the same way, so the field itself updates instantly and the (expensive)
+    // catalogue re-render happens shortly after typing pauses.
+    let heroSearchDebounceTimer = null;
     function syncHeroSearch(){
       mainCatSearch.value = aiInput.value;
       activeFilter = 'all';
       filterRow.querySelectorAll('.filter-chip').forEach(c => {
         c.classList.toggle('active', c.dataset.filter === 'all');
       });
-      renderCatalogue();
+      clearTimeout(heroSearchDebounceTimer);
+      heroSearchDebounceTimer = setTimeout(() => {
+        visibleCount = 12;
+        renderCatalogue();
+      }, 150);
     }
     aiInput.addEventListener('input', syncHeroSearch);
     if(aiForm){
