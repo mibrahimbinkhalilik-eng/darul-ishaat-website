@@ -4171,7 +4171,7 @@
     if(activeFilter === '__sets__') return /\b([2-9]|\d{2,})\s+volumes\b/i.test(meta);
     if(activeFilter === '__twocolor__') return !!b?.twoColor;
     if(activeFilter === '__fourcolor__') return !!b?.fourColor;
-    if(activeFilter === '__importedpaper__') return /\b([2-9]|\d{2,})\s+volumes\b/i.test(meta) || meta.includes('English');
+    if(activeFilter === '__importedpaper__') return isImportedPaper(b);
     if(activeFilter === '__shuruhat__') return /\bsharh\b/i.test(title) || /شرح/.test(urdu);
     if(activeFilter === '__hajjramadan__') return /\b(hajj|umrah|umra|ziyarat|ramadan|ramzan|fasting|zakat|zakaat|zakah|zakaah)\b/i.test(title + ' ' + meta) || /\broza\b(?!-)/i.test(title + ' ' + meta) || /(?<![\u0600-\u06FF])(حج|عمرہ|زیارت|رمضان|روزہ|روزے|زکوٰۃ|زکات|زکاۃ|زکوة)(?![\u0600-\u06FF])/.test(urdu);
     if(activeFilter === '__islamicbanking__') return /\b(bank|banking|banks|riba|sood|sud|interest|takaful|murabaha|murabahah|ijarah|ijara|leasing|provident fund)\b/i.test(title + ' ' + meta) || /(?<![\u0600-\u06FF])(بینک|بینکنگ|سود|تکافل|مرابحہ|اجارہ)(?![\u0600-\u06FF])/.test(urdu);
@@ -4315,6 +4315,46 @@
     coverResizeTimer = setTimeout(fitAllCoverPhotos, 150);
   });
 
+  // Titles owner confirmed are NOT imported paper (all are multi-volume
+  // sets that the volume-count rule below would otherwise badge).
+  const NON_IMPORTED_TITLES = new Set([
+    "Qoot-ul-Quloob",
+    "Nukhba-tul-Masail (Tatimma Kitab-un-Nawazil)",
+    "Ma'arif-ul-Hadith",
+    "Anwar-ul-Bayan fi Kashf Asrar al-Qur'an",
+    "Kitab-ul-Masail",
+    "Kifayat-ul-Mufti",
+    "Hilyat-ul-Awliya wa Tabaqat-ul-Asfiya (Urdu)",
+    "Tareekh Tabari (Tareekh al-Umam wal-Muluk)",
+    "Nawazil-ul-Fiqh",
+    "Mahmood-ul-Mawaiz",
+    "Tareekh Ibn Kathir (al-Bidayah wan-Nihayah)",
+    "Shu'ab-ul-Iman",
+    "Mahmood-ul-Fatawa",
+    "Khutbat-e-Ali Mian",
+    "Ain-ul-Hidaya Jadeed",
+    "Siyar-us-Sahabah",
+    "Nibras al-Sari fi Riyad al-Bukhari",
+    "Ma'loomat ka Encyclopedia",
+    "Fatawa Alamgiri",
+    "Shumail-e-Kubra (Uswa Hasanah)",
+    "Imdad-ul-Fatawa",
+    "Fatawa Mahmoodiyah",
+    "Hadith Ke Islahi Mazameen",
+    "Al-Rafiq al-Faseeh (Sharh Urdu Mishkat al-Masabih)",
+    "Fatawa Qasimia",
+    "Jadeed Fiqhi Mabahis",
+    "Nukhbat-ul-Masail",
+    "Tafsir Durr-e-Manthur",
+    "Habib-ul-Fatawa",
+    "Al-Fiqh al-Islami wa Adillatuhu"
+  ]);
+  function isImportedPaper(b){
+    const meta = b?.meta || '';
+    if(NON_IMPORTED_TITLES.has(b?.title)) return false;
+    return /\b([2-9]|\d{2,})\s+volumes\b/i.test(meta) || meta.includes('English');
+  }
+
   function bookCardHTML(b){
     // Defensive: never let one malformed book entry break the whole grid.
     // Missing fields fall back to safe defaults instead of throwing.
@@ -4337,7 +4377,7 @@
       // regex and language check the Sets/English tabs already use, rather
       // than a stored per-book flag, so it can never drift out of sync with
       // what those tabs actually show.
-      const importedPaper = /\b([2-9]|\d{2,})\s+volumes\b/i.test(meta) || meta.includes('English');
+      const importedPaper = isImportedPaper(b);
       return `
         <div class="book-card" data-book-id="${id}">
           <div class="book-cover-3d${img ? ' has-photo' : ''}" style="--cover-main: ${colors.main}; --cover-accent: ${accent};${coverAspect ? ` aspect-ratio:${coverAspect};` : ''}">
