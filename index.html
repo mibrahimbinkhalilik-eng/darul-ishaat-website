@@ -4260,6 +4260,17 @@
         return (a?.title || '').localeCompare(b?.title || '');
       });
 
+      // Imported Paper and 2-Color Printing tabs: Urdu books lead, then
+      // Arabic/English. Array.sort is stable, so the volume-count order
+      // above is preserved inside each group.
+      if(activeFilter === '__importedpaper__' || activeFilter === '__twocolor__'){
+        const isUrduBook = b => {
+          const m = b?.meta || '';
+          return m.includes('Urdu') && !m.includes('English');
+        };
+        filtered = filtered.slice().sort((a, b) => Number(isUrduBook(b)) - Number(isUrduBook(a)));
+      }
+
       // Pinned exception: on the 4-Color Printing tab specifically, Ilmi
       // Kashkol (Thamarat-ul-Awraq) always leads, ahead of the normal
       // volume-count sort above.
