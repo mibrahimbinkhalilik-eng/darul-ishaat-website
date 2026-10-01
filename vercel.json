@@ -1,0 +1,10 @@
+{
+  "functions": {
+    "api/seo.js": { "includeFiles": "index.html" }
+  },
+  "rewrites": [
+    { "source": "/book/:slug", "destination": "/api/seo?slug=:slug" },
+    { "source": "/book/:slug/", "destination": "/api/seo?slug=:slug" },
+    { "source": "/sitemap.xml", "destination": "/api/seo?sitemap=1" }
+  ]
+}
