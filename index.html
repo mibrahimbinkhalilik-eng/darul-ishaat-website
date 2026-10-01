@@ -4442,44 +4442,29 @@
     coverResizeTimer = setTimeout(fitAllCoverPhotos, 150);
   });
 
-  // Titles owner confirmed are NOT imported paper (all are multi-volume
-  // sets that the volume-count rule below would otherwise badge).
-  const NON_IMPORTED_TITLES = new Set([
-    "Qoot-ul-Quloob",
-    "Nukhba-tul-Masail (Tatimma Kitab-un-Nawazil)",
-    "Ma'arif-ul-Hadith",
-    "Anwar-ul-Bayan fi Kashf Asrar al-Qur'an",
-    "Kitab-ul-Masail",
-    "Kifayat-ul-Mufti",
-    "Hilyat-ul-Awliya wa Tabaqat-ul-Asfiya (Urdu)",
-    "Tareekh Tabari (Tareekh al-Umam wal-Muluk)",
-    "Nawazil-ul-Fiqh",
-    "Mahmood-ul-Mawaiz",
-    "Tareekh Ibn Kathir (al-Bidayah wan-Nihayah)",
-    "Shu'ab-ul-Iman",
-    "Mahmood-ul-Fatawa",
-    "Khutbat-e-Ali Mian",
-    "Ain-ul-Hidaya Jadeed",
-    "Siyar-us-Sahabah",
-    "Nibras al-Sari fi Riyad al-Bukhari",
-    "Ma'loomat ka Encyclopedia",
-    "Fatawa Alamgiri",
-    "Shumail-e-Kubra (Uswa Hasanah)",
-    "Imdad-ul-Fatawa",
-    "Fatawa Mahmoodiyah",
-    "Hadith Ke Islahi Mazameen",
-    "Al-Rafiq al-Faseeh (Sharh Urdu Mishkat al-Masabih)",
-    "Fatawa Qasimia",
-    "Jadeed Fiqhi Mabahis",
-    "Nukhbat-ul-Masail",
-    "Tafsir Durr-e-Manthur",
-    "Habib-ul-Fatawa",
-    "Al-Fiqh al-Islami wa Adillatuhu"
+  // Imported Paper rule (owner-confirmed):
+  //  • every English-language book is on imported paper;
+  //  • among Urdu books ONLY the titles below are — no other Urdu book
+  //    (multi-volume or not) gets the badge or appears in the tab.
+  const IMPORTED_URDU_TITLES = new Set([
+    "Tafsir Bayan-ul-Qur'an",                          // تفسیر بیان القرآن
+    "Tafsir-e-'Uthmani (Urdu)",                        // تفسیر عثمانی
+    "Tafheem-ul-Bukhari (Sharh Sahih al-Bukhari)",     // تفہیم البخاری
+    "Tafheem-ul-Muslim (Sharh Sahih Muslim)",          // تفہیم المسلم
+    "Tafsir Kamalain (Sharh Urdu Tafsir Jalalain)",    // تفسیر کمالین
+    "Mishkat Sharif",                                  // مشکوٰۃ شریف
+    "Mishkat Shareef",                                 // مشکوٰۃ شریف (second listing)
+    "Hayat-us-Sahaba",                                 // حیات الصحابہ
+    "Ehya-ul-Uloom",                                   // احیاء العلوم
+    "Tafsir Ibn Kathir (Urdu)",                        // تفسیر ابن کثیر
+    "Mazahir-e-Haq Jadeed: Sharh Mishkat Shareef",     // مظاہر حق جدید
+    "Ashraf al-Hidayah (Sharh Urdu Hidayah)",          // اشرف الہدایہ
+    "Tafsir Mazhari"                                   // تفسیر مظہری
   ]);
   function isImportedPaper(b){
     const meta = b?.meta || '';
-    if(NON_IMPORTED_TITLES.has(b?.title)) return false;
-    return /\b([2-9]|\d{2,})\s+volumes\b/i.test(meta) || /english/i.test(meta);
+    if(/english/i.test(meta)) return true;
+    return IMPORTED_URDU_TITLES.has(b?.title);
   }
 
   function bookCardHTML(b){
