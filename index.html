@@ -9,6 +9,67 @@
 <!-- Umami analytics -->
 <script defer src="https://cloud.umami.is/script.js" data-website-id="f8b9212a-1c36-46e3-8d92-ef366fe80f06"></script>
 <title>Darul Ishaat — Publishers of Islamic Books, Karachi, Est. 1950</title>
+<meta name="description" content="Darul Ishaat, Karachi — publishers, booksellers and exporters of the Holy Quran and authentic Islamic literature since 1950. Browse 700+ titles in Urdu, English and Arabic and order on WhatsApp.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://darulishaatglobal.com/">
+
+<!-- Open Graph (WhatsApp, Facebook, LinkedIn, Telegram previews) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Darul Ishaat">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="Darul Ishaat — Islamic Books, Quran &amp; Hadith | Karachi, Est. 1950">
+<meta property="og:description" content="Publishers, booksellers and exporters of the Holy Quran and authentic Islamic literature. 700+ titles in Urdu, English and Arabic — order on WhatsApp, delivery across Pakistan.">
+<meta property="og:url" content="https://darulishaatglobal.com/">
+<meta property="og:image" content="https://darulishaatglobal.com/og-home.jpg">
+<meta property="og:image:secure_url" content="https://darulishaatglobal.com/og-home.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Darul Ishaat — Islamic books published in Karachi since 1950">
+
+<!-- Twitter / X Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Darul Ishaat — Islamic Books, Quran &amp; Hadith | Karachi, Est. 1950">
+<meta name="twitter:description" content="Publishers, booksellers and exporters of the Holy Quran and authentic Islamic literature. 700+ titles in Urdu, English and Arabic.">
+<meta name="twitter:image" content="https://darulishaatglobal.com/og-home.jpg">
+<meta name="twitter:image:alt" content="Darul Ishaat — Islamic books published in Karachi since 1950">
+
+<!-- Structured data: the publisher/shop and the site search. Book + Product
+     markup for every catalogue entry is generated from the catalogue array
+     further down the page (id="daCatalogueSchema"). -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": ["Organization", "BookStore"],
+      "@id": "https://darulishaatglobal.com/#organization",
+      "name": "Darul Ishaat",
+      "url": "https://darulishaatglobal.com/",
+      "logo": "https://darulishaatglobal.com/icons/icon-512.png",
+      "image": "https://darulishaatglobal.com/og-home.jpg",
+      "description": "Publishers, booksellers and exporters of the Holy Quran and authentic Islamic literature, Karachi — established 1950.",
+      "foundingDate": "1950",
+      "telephone": "+92-317-8223345",
+      "address": { "@type": "PostalAddress", "streetAddress": "Urdu Bazar, M.A. Jinnah Road", "addressLocality": "Karachi", "addressCountry": "PK" },
+      "areaServed": "Worldwide",
+      "sameAs": ["https://www.facebook.com/share/1DDPKRw3u3/"]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://darulishaatglobal.com/#website",
+      "url": "https://darulishaatglobal.com/",
+      "name": "Darul Ishaat",
+      "publisher": { "@id": "https://darulishaatglobal.com/#organization" },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://darulishaatglobal.com/?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+  ]
+}
+</script>
 
 <!-- PWA / Add to Home Screen -->
 <link rel="manifest" href="manifest.json">
@@ -5144,6 +5205,169 @@
     }, 1000);
   });
   renderCatalogue();
+
+  /* DA_SEO_START — shared by this page and by build-seo.mjs (keep both markers) */
+  const DA_SEO = (function(){
+    let SITE = 'https://darulishaatglobal.com';
+    function setSite(u){ SITE = String(u).replace(/\/+$/, ''); }
+    function site(){ return SITE; }
+    function org(){
+      return { '@type':'Organization', '@id': SITE + '/#organization', name:'Darul Ishaat', url: SITE + '/' };
+    }
+    // URL-safe slug from the English title (diacritics, apostrophes and
+    // symbols removed). Duplicate titles get the cover-image number added.
+    function slugBase(t){
+      return String(t || '').toLowerCase().normalize('NFKD')
+        .replace(/[\u0300-\u036f]/g, '').replace(/['\u2018\u2019`]/g, '')
+        .replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+    }
+    function imgNum(b){
+      const m = String(b.img || '').match(/book-(\d+)/);
+      return m ? m[1] : '';
+    }
+    function slugs(list){
+      const seen = {};
+      return list.map(function(b, i){
+        let s = slugBase(b.title) || 'book';
+        if(seen[s]) s = s + '-' + (imgNum(b) || (i + 1));
+        while(seen[s]) s += '-x';
+        seen[s] = 1;
+        return s;
+      });
+    }
+    function pageUrl(slug){ return SITE + '/book/' + slug + '/'; }
+    function absImg(p){ return SITE + '/' + encodeURI(String(p || '').replace(/^\.?\//, '')); }
+    function cleanMeta(b){ return String(b.meta || '').replace(/\s+/g, ' ').trim(); }
+    function langs(b){
+      const m = String(b.meta || ''), out = [];
+      if(/urdu/i.test(m)) out.push('ur');
+      if(/arabic/i.test(m)) out.push('ar');
+      if(/english/i.test(m)) out.push('en');
+      return out;
+    }
+    // "Author A & Author B, trans. Translator" -> authors + translator
+    function parseAuthor(a){
+      const s = String(a || '').replace(/\s+/g, ' ').trim();
+      const t = s.match(/,?\s*(?:trans\.?|tr\.|translated by)\s+([^,;]+)/i);
+      let primary = s.split(/,\s*(?:trans\.?|tr\.|translated|urdu tarjuma|ta'liqat|zer-e|edited|compiled|dalail|ma')/i)[0];
+      primary = primary.replace(/^(?:compiled|edited|collected)\s+by\s+/i, '');
+      const names = primary.split(/\s+(?:&|and)\s+|\s*;\s*/).map(function(x){ return x.trim(); }).filter(Boolean);
+      return { names: names.length ? names : [s], translator: t ? t[1].trim() : '' };
+    }
+    function describe(b){
+      const a = parseAuthor(b.author).names.join(' & ');
+      return (b.title + ' by ' + a + ' \u2014 ' + b.cat + '. ' + cleanMeta(b) + '. Published by Darul Ishaat, Karachi.')
+        .replace(/\.(\s*\.)+/g, '.').replace(/\s+/g, ' ').trim();
+    }
+    function shortDesc(b, max){
+      const d = describe(b);
+      return d.length <= max ? d : d.slice(0, max - 1).replace(/\s+\S*$/, '') + '\u2026';
+    }
+    // One entity typed as both schema.org/Book and schema.org/Product.
+    function bookLd(b, slug){
+      const a = parseAuthor(b.author), url = pageUrl(slug), L = langs(b), n = imgNum(b);
+      const people = a.names.map(function(x){ return { '@type':'Person', name:x }; });
+      const o = {
+        '@type': ['Book', 'Product'],
+        '@id': url + '#book',
+        name: b.title,
+        url: url,
+        image: absImg(b.img),
+        author: people.length === 1 ? people[0] : people,
+        publisher: { '@id': SITE + '/#organization' },
+        brand: { '@type':'Brand', name:'Darul Ishaat' },
+        genre: b.cat,
+        category: b.cat,
+        description: describe(b),
+        offers: {
+          '@type':'Offer', url: url, priceCurrency:'PKR',
+          availability:'https://schema.org/InStock',
+          itemCondition:'https://schema.org/NewCondition',
+          seller: { '@id': SITE + '/#organization' }
+        }
+      };
+      if(b.urdu) o.alternateName = b.urdu;
+      if(a.translator) o.translator = { '@type':'Person', name: a.translator };
+      if(L.length) o.inLanguage = L.length === 1 ? L[0] : L;
+      if(n) o.sku = 'DI-' + n;
+      return o;
+    }
+    function itemList(list, slugArr){
+      return {
+        '@type':'ItemList', '@id': SITE + '/#catalogue',
+        name:'Darul Ishaat book catalogue', numberOfItems: list.length,
+        itemListElement: list.map(function(b, i){
+          return { '@type':'ListItem', position: i + 1, item: bookLd(b, slugArr[i]) };
+        })
+      };
+    }
+    function bookPageGraph(b, slug){
+      return {
+        '@context':'https://schema.org',
+        '@graph': [
+          bookLd(b, slug),
+          { '@type':'BreadcrumbList', itemListElement: [
+            { '@type':'ListItem', position:1, name:'Darul Ishaat', item: SITE + '/' },
+            { '@type':'ListItem', position:2, name: b.title, item: pageUrl(slug) }
+          ] }
+        ]
+      };
+    }
+    return { setSite:setSite, site:site, org:org, slugBase:slugBase, imgNum:imgNum, slugs:slugs,
+             pageUrl:pageUrl, absImg:absImg, cleanMeta:cleanMeta, langs:langs, parseAuthor:parseAuthor,
+             describe:describe, shortDesc:shortDesc, bookLd:bookLd, itemList:itemList, bookPageGraph:bookPageGraph };
+  })();
+  /* DA_SEO_END */
+
+  // ── SEO: dynamic Schema.org JSON-LD (Book + Product) built from the
+  // catalogue array above. Added once the browser is idle so it never
+  // delays first paint. Every book also has a static landing page at
+  // /book/<slug>/ (generated by build-seo.mjs) that carries its own
+  // Open Graph / Twitter tags, so WhatsApp & social previews work.
+  (function(){
+    function addCatalogueSchema(){
+      try{
+        if(document.getElementById('daCatalogueSchema')) return;
+        const slugArr = DA_SEO.slugs(CATALOGUE);
+        const s = document.createElement('script');
+        s.type = 'application/ld+json';
+        s.id = 'daCatalogueSchema';
+        s.textContent = JSON.stringify({ '@context':'https://schema.org', '@graph':[ DA_SEO.itemList(CATALOGUE, slugArr) ] });
+        document.head.appendChild(s);
+      }catch(err){}
+    }
+    if('requestIdleCallback' in window) requestIdleCallback(addCatalogueSchema, { timeout: 4000 });
+    else setTimeout(addCatalogueSchema, 1500);
+  })();
+
+  // ── Deep links: /?book=<slug> opens the catalogue on that title (used by
+  // the "View in catalogue" button on each book page); /?q=<text> runs a
+  // catalogue search (used by the WebSite SearchAction in the page head).
+  (function(){
+    try{
+      const params = new URLSearchParams(location.search);
+      let term = '';
+      const slug = params.get('book');
+      if(slug){
+        const i = DA_SEO.slugs(CATALOGUE).indexOf(slug);
+        if(i > -1){
+          term = CATALOGUE[i].title;
+          document.title = term + ' \u2014 Darul Ishaat';
+        }
+      } else if(params.get('q')){
+        term = params.get('q').slice(0, 120);
+      }
+      if(term){
+        catSearch.value = term;
+        visibleCount = 12;
+        renderCatalogue();
+        setTimeout(function(){
+          const c = document.getElementById('catalogue');
+          if(c) c.scrollIntoView({ behavior:'smooth', block:'start' });
+        }, 500);
+      }
+    }catch(err){}
+  })();
 
   // The founder section photo reuses the same embedded image already
   // present in the hero avatar above it, instead of storing the photo
