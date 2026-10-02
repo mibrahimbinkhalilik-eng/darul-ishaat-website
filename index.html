@@ -4534,15 +4534,18 @@
         return (a?.title || '').localeCompare(b?.title || '');
       });
 
-      // Imported Paper and 2-Color Printing tabs: Urdu books lead, then
-      // Arabic/English. Array.sort is stable, so the volume-count order
-      // above is preserved inside each group.
-      if(activeFilter === '__importedpaper__' || activeFilter === '__twocolor__'){
-        const isUrduBook = b => {
+      // Language order on every tab EXCEPT "English Books": Urdu books lead,
+      // then Arabic/Persian-only books, then English books last. Array.sort
+      // is stable, so the volume-count order above is preserved inside each
+      // language group. (The English tab keeps the plain volume-count order.)
+      if(activeFilter !== '__english__'){
+        const langRank = b => {
           const m = b?.meta || '';
-          return m.includes('Urdu') && !m.includes('English');
+          if(/english/i.test(m)) return 2;                                   // English books last
+          if(/(arabic|persian)/i.test(m) && !/(urdu|tarjuma)/i.test(m + ' ' + (b?.title || ''))) return 1;  // Arabic/Persian-only
+          return 0;                                                          // Urdu books first
         };
-        filtered = filtered.slice().sort((a, b) => Number(isUrduBook(b)) - Number(isUrduBook(a)));
+        filtered = filtered.slice().sort((a, b) => langRank(a) - langRank(b));
       }
 
       // Pinned exception: on the 4-Color Printing tab specifically, Ilmi
@@ -6038,6 +6041,28 @@
     let micPrimed = false;
     let priming = false;
 
+    // Skip the slow "Getting the mic ready…" warm-up (2–4 s on many phones)
+    // whenever it isn't needed. That warm-up only exists to let a brand-new
+    // permission prompt resolve before listening starts; if the browser
+    // already knows the answer there is nothing to wait for:
+    //   granted -> start listening straight away
+    //   denied  -> start() reports "Microphone blocked" immediately instead
+    //              of hanging on a prompt that will never appear
+    //   prompt  -> first-ever use: keep the warm-up so the permission dialog
+    //              doesn't swallow the first words
+    // Browsers without the Permissions API for the mic (e.g. iOS Safari) fall
+    // back to a remembered flag from the last successful warm-up.
+    try{ if(localStorage.getItem('daMicOK') === '1') micPrimed = true; }catch(err){}
+    try{
+      if(navigator.permissions && navigator.permissions.query){
+        navigator.permissions.query({ name: 'microphone' }).then(function(p){
+          const apply = function(){ micPrimed = (p.state === 'granted' || p.state === 'denied'); };
+          apply();
+          p.onchange = apply;
+        }).catch(function(){ /* unsupported — keep the remembered flag */ });
+      }
+    }catch(err){}
+
     function startListening(){
       try{ recognition.start(); } catch(err){
         // If start() throws because the instance is in a bad state, rebuild
@@ -6111,6 +6136,7 @@
           stream.getTracks().forEach(t => t.stop());
           micPrimed = true;
           priming = false;
+          try{ localStorage.setItem('daMicOK', '1'); }catch(err){}
           // On Android, starting SpeechRecognition in the same tick as
           // stopping the priming stream's tracks races the OS's mic
           // teardown: the hardware hasn't actually been released yet, so
@@ -6126,6 +6152,7 @@
           clearTimeout(primingTimeout);
           // Permission denied or errored — let SpeechRecognition's own
           // onerror handler report it clearly when start() is attempted.
+          try{ localStorage.removeItem('daMicOK'); }catch(err){}
           micPrimed = true;
           priming = false;
           startListening();
