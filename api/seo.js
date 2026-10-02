@@ -1,8 +1,13 @@
 /**
  * api/seo.js — ONE file that serves, on demand (Vercel serverless function):
- *   /book/<slug>/   a small landing page for that book, carrying the book's own
- *                   Open Graph + Twitter tags and Book/Product JSON-LD, so
- *                   WhatsApp / Facebook / Telegram show the right cover & title
+ *   /book/<slug>    BOTS (WhatsApp, Facebook, Telegram, X, LinkedIn, Googlebot ...):
+ *                   a small page for that book carrying its own Open Graph +
+ *                   Twitter tags and Book/Product JSON-LD, so link previews show
+ *                   the right cover & title.
+ *                   PEOPLE: the full website (index.html), where the book's
+ *                   details popup opens automatically over the catalogue.
+ *                   (vercel.json already sends people straight to the static
+ *                   index.html; the check in this file is a safety net.)
  *   /sitemap.xml    the full sitemap (home page + every book)
  *
  * It reads the CATALOGUE array straight out of index.html on each cold start,
@@ -28,6 +33,9 @@ function load() {
   const file = candidates.find((p) => fs.existsSync(p));
   if (!file) throw new Error('index.html not found next to /api');
   const html = fs.readFileSync(file, 'utf8');
+  // The full site is also served at /book/<slug>, so relative URLs
+  // (images/, icons/, manifest.json, sw.js) must resolve from the site root.
+  const siteHtml = /<base\s/i.test(html) ? html : html.replace(/<head>/i, '<head>\n<base href="/">');
 
   // Shared slug + JSON-LD helpers live in index.html (DA_SEO block).
   const b0 = html.indexOf('/* DA_SEO_START');
@@ -51,9 +59,13 @@ function load() {
   const umami = (html.match(/<script defer src="https:\/\/cloud\.umami\.is\/script\.js"[^>]*><\/script>/) || [''])[0];
   const slugs = DA_SEO.slugs(CATALOGUE);
   const bySlug = new Map(slugs.map((s, i) => [s, i]));
-  CACHE = { DA_SEO, CATALOGUE, ASPECT, slugs, bySlug, umami };
+  CACHE = { DA_SEO, CATALOGUE, ASPECT, slugs, bySlug, umami, siteHtml };
   return CACHE;
 }
+
+// Link-preview / search crawlers. Mirrors the user-agent rule in vercel.json.
+const BOT_RE = /bot[\/;\-) ]?$|bot[\/;\-)]|crawl|spider|facebookexternalhit|facebot|whatsapp|pinterest|embedly|iframely|vkshare|skypeuripreview|viber|bluesky|mastodon|google-|googleother|mediapartners|meta-external|applebot|inspectiontool/i;
+const isBot = (ua) => BOT_RE.test(String(ua || ''));
 
 const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const jsonLd = (o) => JSON.stringify(o).replace(/</g, '\\u003c');
@@ -198,16 +210,28 @@ module.exports = function handler(req, res) {
       res.setHeader('Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=604800');
       return res.end(sitemap(S));
     }
+    const ua = (req.headers && req.headers['user-agent']) || '';
+    // The reply depends on who is asking, so it must never be shared between
+    // visitors by an edge/browser cache.
+    res.setHeader('Vary', 'User-Agent');
+    res.setHeader('Cache-Control', 'private, no-cache, no-store, max-age=0');
+
+    if (!isBot(ua)) {
+      // A person: give them the whole website. index.html opens this book's
+      // details popup by itself because the address is /book/<slug>.
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'text/html; charset=utf-8');
+      return res.end(S.siteHtml);
+    }
+
     const i = slug ? S.bySlug.get(String(slug).toLowerCase().replace(/\/+$/, '')) : undefined;
     if (i === undefined) {
       res.statusCode = 404;
       res.setHeader('Content-Type', 'text/html; charset=utf-8');
-      res.setHeader('Cache-Control', 'public, s-maxage=300');
       return res.end(notFound());
     }
     res.statusCode = 200;
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
-    res.setHeader('Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=604800');
     return res.end(bookPage(S, i));
   } catch (err) {
     res.statusCode = 500;
