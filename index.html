@@ -1868,6 +1868,53 @@
 
 
 
+  /* Voice language / accent pill (inside each AI search bar) */
+  .ai-lang-inline{
+    flex:none;
+    min-width:42px;
+    height:30px;
+    padding:0 9px;
+    border-radius:999px;
+    border:1px solid rgba(169,133,58,0.55);
+    background:rgba(255,255,255,0.7);
+    color:#3a2a14;
+    font-family:'Space Mono', monospace;
+    font-size:0.68rem;
+    font-weight:700;
+    letter-spacing:0.02em;
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    line-height:1;
+  }
+  .ai-lang-inline:active{ transform:scale(0.96); }
+
+  /* "Did you mean…?" suggestions shown when voice finds no exact match */
+  .voice-suggest{
+    max-width:580px;
+    margin:-12px auto 18px;
+    padding:12px 14px;
+    border-radius:16px;
+    background:rgba(250,248,244,0.98);
+    border:1px solid rgba(169,133,58,0.35);
+    box-shadow:0 6px 18px rgba(28,23,18,0.10);
+    text-align:center;
+  }
+  .voice-suggest[hidden]{ display:none; }
+  .voice-suggest .vs-head{ font-size:0.86rem; color:var(--ink-soft); margin-bottom:8px; }
+  .voice-suggest .vs-chips{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
+  .voice-suggest .vs-chip{
+    border:1px solid rgba(138,31,43,0.35);
+    background:#fff;
+    color:var(--oxblood-deep);
+    border-radius:999px;
+    padding:8px 14px;
+    font-size:0.86rem;
+    cursor:pointer;
+  }
+  .voice-suggest .vs-chip.vs-lang{ border-color:rgba(169,133,58,0.7); color:#3a2a14; background:rgba(255,246,222,0.9); }
+
   .hero::before{
     content:"";
     position:absolute;
@@ -2899,6 +2946,7 @@
         <span class="ai-badge">AI</span>
         <svg class="ai-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
         <input type="text" id="aiSearchInput" placeholder="Ask AI — search any book…" aria-label="Ask AI to search the catalogue">
+        <button class="ai-lang-inline" type="button" data-voice-lang aria-label="Voice language">EN</button>
         <button class="ai-mic-inline" id="aiMicInline" type="button" aria-label="Search by voice">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
             <rect x="9" y="2" width="6" height="12" rx="3"/>
@@ -3139,6 +3187,7 @@
           <span class="ai-badge">AI</span>
           <svg class="ai-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
           <input type="text" id="catSearch" placeholder="Search by book, author name…" aria-label="Search catalogue by book or author">
+          <button class="ai-lang-inline" type="button" data-voice-lang aria-label="Voice language">EN</button>
           <button class="ai-mic-inline" id="catMicInline" type="button" aria-label="Search by voice">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
               <rect x="9" y="2" width="6" height="12" rx="3"/>
@@ -3147,6 +3196,7 @@
             </svg>
           </button>
         </div>
+        <div class="voice-suggest" id="voiceSuggest" hidden aria-live="polite"></div>
         <div class="filter-row" id="filterRow">
           <button class="filter-chip active" data-filter="all">All</button>
         </div>
@@ -3317,6 +3367,19 @@
       umami.track(name, flatParams);
     }
   }
+
+  // Outbound social clicks (Facebook / YouTube / Instagram) — one delegated
+  // listener covers the header, mobile-nav, footer and any other icon.
+  document.addEventListener('click', function(ev){
+    try{
+      var a = ev.target.closest && ev.target.closest('a[href]');
+      if(!a) return;
+      var h = a.getAttribute('href') || '';
+      var net = /facebook\.com/.test(h) ? 'facebook' : /youtube\.com/.test(h) ? 'youtube' : /instagram\.com/.test(h) ? 'instagram' : '';
+      if(net) trackEvent('social_click', { network: net });
+    }catch(err){}
+  }, true);
+
 
   // Automated runtime error tracking — catches any uncaught exception on
   // the page (a broken script, a failing scroll handler, a bad voice-command
@@ -4336,6 +4399,15 @@
     }
     // Strip Arabic/Urdu diacritics (harakat) and tatweel
     t = t.replace(/[\u064B-\u065F\u0670\u06D6-\u06ED\u0640]/g, '');
+    // Unify look-alike Arabic / Urdu / Persian letters so Arabic-keyboard,
+    // Urdu-keyboard and speech-recognition spellings all match each other.
+    t = t
+      .replace(/[\u064A\u0649\u06CC\u06D2]/g, '\u06CC')          // ي ى ی ے  -> ی
+      .replace(/[\u0643\u06A9]/g, '\u06A9')                      // ك ک      -> ک
+      .replace(/[\u0647\u0629\u06C1\u06C3\u06BE]/g, '\u06C1')    // ه ة ہ ۃ ھ -> ہ
+      .replace(/[\u0622\u0623\u0625\u0671]/g, '\u0627')          // آ أ إ ٱ  -> ا
+      .replace(/\u0624/g, '\u0648')                              // ؤ -> و
+      .replace(/\u0626/g, '\u06CC');                             // ئ -> ی
     // Strip apostrophes (mid-word, e.g. Qur'an, Rab'i) but turn hyphens
     // and periods into spaces rather than deleting them — hyphens usually
     // join separate words (e.g. "Nukhbat-ul-Masail"), and deleting them
@@ -5209,6 +5281,7 @@
           // get destroyed and re-decoded on every click.
           const filtered = getFilteredBooks();
           const prevCount = visibleCount;
+          trackEvent('load_more_click', { filter: activeFilter, shown_before: prevCount });
           visibleCount += 12;
           const newSlice = filtered.slice(prevCount, visibleCount);
           cardGrid.insertAdjacentHTML('beforeend', newSlice.map(bookCardHTML).join(''));
@@ -5304,6 +5377,7 @@
     }
     filterViewCount = 0;
     activeFilter = btn.dataset.filter;
+    trackEvent('filter_tab_click', { filter: activeFilter });
     filterRow.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
     btn.classList.add('active');
     // Mirror the search->category reset below: picking a category chip
@@ -5795,7 +5869,22 @@
           activeFilter = previousFilter;
           trackEvent('search', { search_term: query, results_count: 0, method: 'voice' });
           trackEvent('search_no_results', { search_term: query, method: 'voice' });
-          setTimeout(() => showVoiceStatus('Didn\u2019t catch a book title in that — try again'), 300);
+          let sugg = suggestTitles(query, 3);
+          if(!sugg.length || sugg[0].score < 0.75){
+            const pool = {};
+            sugg.forEach(x => { pool[x.b.title] = x; });
+            (window.__voiceAlts || []).forEach(alt => {
+              suggestTitles(alt, 3).forEach(x => { if(!pool[x.b.title] || pool[x.b.title].score < x.score) pool[x.b.title] = x; });
+            });
+            sugg = Object.keys(pool).map(k => pool[k]).sort((x, y) => y.score - x.score).slice(0, 3);
+          }
+          showSuggestions(rawTranscript, sugg.map(s => s.b));
+          if(sugg.length){
+            setTimeout(() => showVoiceStatus('Did you mean \u201c' + sugg[0].b.title + '\u201d? Tap a suggestion below.'), 300);
+            if(sugg[0].score >= 0.75) scrollToId('catalogue');
+          } else {
+            statusTextEl.textContent = 'tap & speak a command';
+          }
           return;
         }
         filterRow.querySelectorAll('.filter-chip').forEach(c => c.classList.toggle('active', c.dataset.filter === 'all'));
@@ -5833,10 +5922,163 @@
     let heardAnything = false;
     let listenTimeout;
     let hardStopTimeout;
+    let startGuard;            // watches for the mic never actually opening
+    let audioStarted = false;  // the mic is really capturing sound
+    let soundHeard = false;    // any sound / speech reached the mic
+    let retriedAudio = false;  // one automatic retry per tap if the mic is slow to open
     // Finalized SpeechRecognitionResult chunks accumulated across the
     // current listening session — see note in buildRecognition() on why
     // this exists.
     let finalResults = [];
+
+    // ── Voice language / accent ─────────────────────────────────────────
+    // The browser's speech engine is trained per language/accent, so the
+    // best way to be understood clearly is to listen in the language the
+    // person is actually speaking. The pill beside each mic cycles through
+    // these and remembers the choice. Urdu/Arabic results are matched to
+    // the catalogue through the Urdu-script titles.
+    const VOICE_LANGS = [
+      { code:'en-IN', label:'EN',    name:'English (Pakistan / India accent)' },
+      { code:'ur-PK', label:'اردو',  name:'Urdu' },
+      { code:'ar-SA', label:'عربی',  name:'Arabic' },
+      { code:'en-GB', label:'EN·UK', name:'English (UK accent)' },
+      { code:'en-US', label:'EN·US', name:'English (US accent)' }
+    ];
+    let voiceLangIdx = 0;
+    try{
+      const savedLang = localStorage.getItem('daVoiceLang');
+      const si = VOICE_LANGS.findIndex(l => l.code === savedLang);
+      if(si > -1) voiceLangIdx = si;
+    }catch(err){}
+    function currentLang(){ return VOICE_LANGS[voiceLangIdx]; }
+    function paintLangButtons(){
+      document.querySelectorAll('[data-voice-lang]').forEach(b => {
+        b.textContent = currentLang().label;
+        b.title = 'Voice language: ' + currentLang().name + ' (tap to change)';
+        b.setAttribute('aria-label', 'Voice language: ' + currentLang().name + '. Tap to change.');
+      });
+    }
+    function setVoiceLang(code){
+      const i = VOICE_LANGS.findIndex(l => l.code === code);
+      if(i < 0) return;
+      voiceLangIdx = i;
+      try{ localStorage.setItem('daVoiceLang', code); }catch(err){}
+      paintLangButtons();
+      if(!listening) recognition = buildRecognition();   // new recognizer in the new language
+      trackEvent('voice_language', { lang: code });
+    }
+    document.querySelectorAll('[data-voice-lang]').forEach(b => {
+      b.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        setVoiceLang(VOICE_LANGS[(voiceLangIdx + 1) % VOICE_LANGS.length].code);
+        showVoiceStatus('Voice language: ' + currentLang().name + ' — tap the mic and speak');
+      });
+    });
+    paintLangButtons();
+
+    // ── "Did you mean…?" — sound-alike matching ─────────────────────────
+    // Accents change which letters a speech engine writes down (Zewar ↔
+    // Jewar, Fatawa ↔ Patawa, Mahmoodiyah ↔ Mahmudia). The normal match is
+    // exact-ish; this one compares how words SOUND (vowels dropped, look-
+    // alike consonants merged) and offers the closest titles to tap.
+    const SOUND_CLASS = { p:'b', f:'b', v:'w', d:'t', g:'k', z:'s', j:'s', c:'s', x:'k' };
+    function soundKey(word){
+      let out = '';
+      for(const ch of word){
+        if('aeiouy'.indexOf(ch) > -1){ if(!out) out = ch; continue; }
+        const m = SOUND_CLASS[ch] || ch;
+        if(m !== out[out.length - 1]) out += m;
+      }
+      return out;
+    }
+    function suggestTitles(rawText, limit){
+      const cleaned = String(rawText).toLowerCase()
+        .replace(/\b(?:search for|find|look for|show me|navigate to|go to|show|open|category|categories|section|sections|books?|please|in|the)\b/g, ' ');
+      const qWords = normalizeSearchText(cleaned).split(' ').filter(w => w.length >= 3);
+      if(!qWords.length) return [];
+      const qKeys = qWords.map(soundKey);
+      const scored = [];
+      for(const b of CATALOGUE){
+        const hay = normalizeSearchText(b.title + ' ' + (b.urdu || '') + ' ' + b.author).split(' ').filter(w => w.length >= 3);
+        if(!hay.length) continue;
+        const keys = hay.map(soundKey);
+        let total = 0, strong = 0;
+        for(let qi = 0; qi < qWords.length; qi++){
+          let best = 0;
+          for(let i = 0; i < hay.length; i++){
+            const q = qWords[qi], a = hay[i];
+            const s1 = 1 - levenshtein(q, a) / Math.max(q.length, a.length);
+            const k1 = qKeys[qi], k2 = keys[i];
+            const s2 = (k1 && k2) ? 1 - levenshtein(k1, k2) / Math.max(k1.length, k2.length) : 0;
+            const sc = Math.max(s1, s2 * 0.92);
+            if(sc > best) best = sc;
+          }
+          total += best;
+          if(best >= 0.75) strong++;
+        }
+        const score = total / qWords.length;
+        if(strong >= 1 && score >= 0.62) scored.push({ b: b, score: score });
+      }
+      scored.sort((x, y) => (y.score - x.score) || (x.b.title.length - y.b.title.length));
+      const seen = new Set(), out = [];
+      for(const s of scored){
+        if(seen.has(s.b.title)) continue;
+        seen.add(s.b.title); out.push(s);
+        if(out.length >= limit) break;
+      }
+      return out;
+    }
+
+    const suggestEl = document.getElementById('voiceSuggest');
+    function escapeHtml(s){ return String(s).replace(/[&<>"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c])); }
+    let shownSuggestions = [];
+    function hideSuggestions(){
+      if(!suggestEl) return;
+      suggestEl.hidden = true;
+      suggestEl.innerHTML = '';
+      shownSuggestions = [];
+    }
+    function showSuggestions(heard, books){
+      if(!suggestEl) return;
+      shownSuggestions = books;
+      const cur = currentLang().code;
+      const alts = ['en-IN','ur-PK','ar-SA','en-US'].filter(c => c !== cur);
+      let html = books.length
+        ? '<div class="vs-head">Heard “' + escapeHtml(heard) + '”. Did you mean:</div>'
+        : '';
+      html += '<div class="vs-chips">';
+      books.forEach((b, i) => { html += '<button type="button" class="vs-chip" data-i="' + i + '">' + escapeHtml(b.title) + '</button>'; });
+      alts.forEach(c => {
+        const l = VOICE_LANGS.find(x => x.code === c);
+        if(l) html += '<button type="button" class="vs-chip vs-lang" data-lang="' + c + '">🎙 ' + l.label + '</button>';
+      });
+      html += '</div>';
+      suggestEl.innerHTML = html;
+      suggestEl.hidden = false;
+    }
+    if(suggestEl){
+      suggestEl.addEventListener('click', (ev) => {
+        const chip = ev.target.closest('.vs-chip');
+        if(!chip) return;
+        if(chip.dataset.lang){
+          setVoiceLang(chip.dataset.lang);
+          hideSuggestions();
+          showVoiceStatus('Voice language: ' + currentLang().name + ' — tap the mic and say the title');
+          return;
+        }
+        const b = shownSuggestions[Number(chip.dataset.i)];
+        if(!b) return;
+        catSearch.value = b.title;
+        activeFilter = 'all';
+        filterRow.querySelectorAll('.filter-chip').forEach(c => c.classList.toggle('active', c.dataset.filter === 'all'));
+        visibleCount = 12;
+        renderCatalogue();
+        hideSuggestions();
+        scrollToId('catalogue');
+        trackEvent('voice_suggestion_click', { title: b.title });
+      });
+      catSearch.addEventListener('input', hideSuggestions);
+    }
 
     // Does this candidate transcript, once cleaned up, actually find a
     // catalogue match? Shares the exact same word-level + fuzzy matching
@@ -5903,7 +6145,7 @@
 
     function buildRecognition(){
       const r = new SpeechRecognitionImpl();
-      r.lang = 'en-IN';
+      r.lang = currentLang().code;   // chosen with the language pill (default: English, Pakistan/India accent)
       // Continuous (not one-shot) so a natural pause partway through a
       // longer book title — e.g. between "Fatawa" and "Mahmoodiyah" —
       // doesn't finalize and cut off the rest of what's being said. With
@@ -5914,48 +6156,104 @@
       // once real silence (our own listenTimeout below) says they're done.
       r.continuous = true;
       r.interimResults = true;
-      r.maxAlternatives = 5;
+      r.maxAlternatives = 10;        // more candidate hearings -> better chance one matches the catalogue
+
+      // The recognizer reports "start" a moment BEFORE the phone's mic is
+      // actually capturing sound (on Android that gap is often 1–2 s). Telling
+      // people to speak at "start" is why the first words got lost and the
+      // session ended with "didn't pick up any sound". So: "start" now only
+      // says "starting", and the prompt to speak (plus the silence timer) is
+      // tied to the real audio-start event instead.
+      const hasAudioEvents = ('onaudiostart' in r);
+
+      function armSilence(ms){
+        clearTimeout(listenTimeout);
+        listenTimeout = setTimeout(() => {
+          if(!listening) return;
+          try{ r.stop(); } catch(err){ /* already stopped */ }
+          if(!heardAnything){
+            if(soundHeard){
+              trackEvent('voice_error', { reason: 'sound_not_understood' });
+              showVoiceStatus('Heard you but couldn\u2019t make out the words — speak closer and tap to retry.');
+            } else {
+              trackEvent('voice_error', { reason: 'no_sound_detected' });
+              showVoiceStatus('No sound reached the mic — stop any screen recorder or call using it, then tap to retry.');
+            }
+          }
+        }, ms);
+      }
+
+      function micIsLive(){
+        if(audioStarted) return;
+        audioStarted = true;
+        clearTimeout(startGuard);
+        showVoiceStatus('Speak now…', true);
+        try{ if(navigator.vibrate) navigator.vibrate(25); }catch(err){}   // tiny "go ahead" cue
+        armSilence(6000);
+        // Hard ceiling on the whole session, separate from the rolling silence
+        // timer (which re-arms on every result, including background noise).
+        // Never refreshed, so the session always ends on its own.
+        clearTimeout(hardStopTimeout);
+        hardStopTimeout = setTimeout(() => {
+          if(listening){ try{ r.stop(); } catch(err){ /* already stopped */ } }
+        }, 14000);
+      }
 
       r.onstart = () => {
         listening = true;
         heardAnything = false;
+        soundHeard = false;
+        audioStarted = false;
         finalResults = [];
+        hideSuggestions();
         voiceBtn.classList.add('listening');
-        showVoiceStatus('Listening… try "search for Bahishti Zewar"', true);
-        // Initial window to detect the mic picking up any sound at all.
-        // This gets refreshed (not just left to expire) every time onresult
-        // fires below, so someone saying a longer title doesn't get cut off
-        // mid-sentence just because the total elapsed time passed 5s —
-        // it only fires if there's been real silence for that long.
+        showVoiceStatus('Starting mic (' + currentLang().label + ')… wait for “Speak now”', true);
         clearTimeout(listenTimeout);
-        listenTimeout = setTimeout(() => {
-          if(listening){
-            try{ r.stop(); } catch(err){ /* already stopped */ }
-            if(!heardAnything){
-              trackEvent('voice_error', { reason: 'no_sound_detected' });
-              showVoiceStatus('Mic didn\u2019t pick up any sound — check mic permission for this site, or tap to type instead.');
-            }
-          }
-        }, 5000);
-        // Hard ceiling on the whole session, separate from the rolling
-        // silence timer above. That timer resets on every onresult — including
-        // interim results from ambient background noise/conversation near the
-        // phone, not just genuine attempts to speak a title — so in a noisy
-        // room it can keep re-arming itself and never fire, leaving the mic
-        // stuck "Listening…" indefinitely and eventually submitting whatever
-        // garbled fragment it picked up as a real search. This one is never
-        // refreshed, so no matter how much ambient sound keeps resetting the
-        // silence timer, the session always ends on its own within 18s.
         clearTimeout(hardStopTimeout);
-        hardStopTimeout = setTimeout(() => {
-          if(listening){ try{ r.stop(); } catch(err){ /* already stopped */ } }
-        }, 12000);
+        clearTimeout(startGuard);
+        if(!hasAudioEvents){
+          // Browser doesn't report audio-start: fall back to treating "start"
+          // as live, exactly like before.
+          micIsLive();
+          return;
+        }
+        // If the mic still hasn't opened after 4 s (slow service, or another
+        // app holding the mic), retry ONCE automatically, then explain.
+        startGuard = setTimeout(() => {
+          if(!listening || audioStarted) return;
+          if(!retriedAudio){
+            retriedAudio = true;
+            showVoiceStatus('Mic is slow to start — retrying…', true);
+            r.__retryNow = true;
+            try{ r.abort(); } catch(err){ /* already stopped */ }
+          } else {
+            r.__quiet = true;   // our own abort — don't log it as a user "aborted"
+            try{ r.abort(); } catch(err){ /* already stopped */ }
+            trackEvent('voice_error', { reason: 'mic_never_started' });
+            showVoiceStatus('Mic couldn\u2019t start — close other apps using the mic, then tap to retry.');
+          }
+        }, 4000);
+      };
+      r.onaudiostart = () => { micIsLive(); };
+      r.onsoundstart = () => { soundHeard = true; micIsLive(); };
+      r.onspeechstart = () => {
+        soundHeard = true;
+        micIsLive();
+        armSilence(6000);   // speech is under way — don't let the silence timer cut it off
       };
       r.onend = () => {
         listening = false;
         voiceBtn.classList.remove('listening');
         clearTimeout(listenTimeout);
         clearTimeout(hardStopTimeout);
+        clearTimeout(startGuard);
+        if(r.__retryNow){
+          // The mic never opened on this attempt: start a fresh recognizer once.
+          recognition = buildRecognition();
+          voiceBtn.classList.add('listening');
+          setTimeout(startListening, 350);
+          return;
+        }
         // Now that the session has actually ended, submit whatever was
         // said as one joined-up phrase — this is what makes multi-pause,
         // longer titles work instead of only searching the first fragment.
@@ -5969,6 +6267,12 @@
           // chunk after the first.
           const chunkTexts = capturedFinals.map(pickBestTranscript);
           const bestTranscript = dedupeGrowingChunks(chunkTexts).join(' ').trim();
+          // Noisy rooms often get the right words into a LOWER-ranked guess
+          // — keep every alternative so "Did you mean" can search all of them.
+          window.__voiceAlts = [];
+          if(capturedFinals.length === 1){
+            for(let k = 0; k < capturedFinals[0].length; k++) window.__voiceAlts.push(capturedFinals[0][k].transcript);
+          }
           finalResults = [];
           handleVoiceCommand(bestTranscript);
         }
@@ -5981,18 +6285,27 @@
         listening = false;
         voiceBtn.classList.remove('listening');
         clearTimeout(listenTimeout);
+        clearTimeout(startGuard);
+        if(r.__retryNow) return;   // our own abort() for the automatic retry — onend restarts it
         // Log every error case, including 'aborted' — a manual stop is
         // still a real event worth having in analytics (distinguishing "the
         // person cancelled it themselves" from every other failure reason
         // is itself useful data), it just doesn't get the scary on-screen
         // message the other error types get.
+        if(r.__quiet) return;
         trackEvent('voice_error', { reason: e.error || 'unknown' });
         if(e.error === 'aborted'){
           // User manually tapped to stop — not a real error, so don't
           // overwrite the UI with a scary "error" message.
           return;
         }
-        if(e.error === 'not-allowed' || e.error === 'service-not-allowed'){
+        if(e.error === 'language-not-supported'){
+          const bad = currentLang().name;
+          voiceLangIdx = 0;
+          try{ localStorage.setItem('daVoiceLang', VOICE_LANGS[0].code); }catch(err){}
+          paintLangButtons();
+          showVoiceStatus(bad + ' voice isn\u2019t available on this phone \u2014 switched to English.');
+        } else if(e.error === 'not-allowed' || e.error === 'service-not-allowed'){
           showVoiceStatus('Microphone blocked — allow mic access in your browser settings.');
         } else if(e.error === 'audio-capture'){
           showVoiceStatus('No microphone found on this device.');
@@ -6004,6 +6317,8 @@
       };
       r.onresult = (e) => {
         heardAnything = true;
+        soundHeard = true;
+        if(!audioStarted) micIsLive();
         // Speech is actively coming in — push the cutoff window forward so
         // a longer title in progress doesn't get force-stopped mid-sentence.
         // Kept short (not the old 6s) so the search actually fires soon
@@ -6074,6 +6389,7 @@
 
     voiceBtn.addEventListener('click', () => {
       if(listening){ try{ recognition.stop(); } catch(err){} return; }
+      retriedAudio = false;
 
       if(micPrimed || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
         // Optimistic feedback: flip the button into its "listening" look and
@@ -6128,7 +6444,7 @@
         showVoiceStatus('Mic didn\u2019t respond — check your browser\u2019s microphone permission');
       };
       const primingTimeout = setTimeout(window.__micPrimingCancel, 6000);
-      navigator.mediaDevices.getUserMedia({ audio: true })
+      navigator.mediaDevices.getUserMedia({ audio: { noiseSuppression: true, echoCancellation: true, autoGainControl: true } })
         .then(stream => {
           if(settled) { stream.getTracks().forEach(t => t.stop()); return; }
           settled = true;
