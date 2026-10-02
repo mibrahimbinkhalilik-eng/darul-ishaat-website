@@ -2723,6 +2723,41 @@
     .cart-drawer{ width:100vw; }
   }
 
+
+  /* ===== Book detail popup (URL becomes /book/<slug> while it is open) ===== */
+  .book-card{ cursor:pointer; }
+  .book-link{ color:inherit; text-decoration:none; }
+  .book-link:hover{ text-decoration:underline; text-underline-offset:3px; }
+  .book-detail-overlay{
+    position:fixed; inset:0; z-index:1300; display:flex; align-items:center; justify-content:center;
+    padding:20px; background:rgba(20,15,10,0.62); backdrop-filter:blur(3px);
+  }
+  .book-detail-overlay[hidden]{ display:none; }
+  .book-detail{
+    position:relative; width:min(860px,100%); max-height:92vh; overflow:auto;
+    background:var(--paper); color:var(--ink); border-radius:16px; box-shadow:0 30px 80px rgba(0,0,0,0.45);
+    padding:26px;
+  }
+  .bd-close{
+    position:absolute; top:10px; right:10px; width:38px; height:38px; border-radius:50%;
+    border:1px solid var(--line-strong); background:var(--paper-card); color:var(--ink);
+    font-size:18px; line-height:1; cursor:pointer;
+  }
+  .bd-close:hover{ background:var(--paper-deep); }
+  .bd-body{ display:grid; grid-template-columns:minmax(0,260px) minmax(0,1fr); gap:26px; align-items:start; }
+  .bd-cover img{ width:100%; height:auto; border-radius:8px; box-shadow:0 10px 28px rgba(28,23,18,0.25); background:var(--paper-deep); display:block; }
+  .bd-info h2{ margin:0 0 4px; font-size:1.55rem; line-height:1.25; padding-right:34px; }
+  .bd-urdu{ font-size:1.35rem; color:var(--ink-soft); margin:0 0 10px; }
+  .bd-author{ color:var(--ink-soft); margin:0 0 12px; }
+  .bd-tags{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px; }
+  .bd-meta{ color:var(--ink-soft); font-size:.95rem; margin:0 0 16px; }
+  .bd-actions{ display:flex; flex-wrap:wrap; gap:10px; margin-top:16px; }
+  .bd-actions .btn{ padding:9px 16px; font-size:.95rem; }
+  @media (max-width:640px){
+    .book-detail{ padding:18px; }
+    .bd-body{ grid-template-columns:1fr; gap:16px; }
+    .bd-cover{ max-width:220px; margin:0 auto; }
+  }
 </style>
 </head>
 <body>
@@ -2784,6 +2819,12 @@
 </header>
 
 <div class="cart-overlay" id="cartOverlay"></div>
+<div class="book-detail-overlay" id="bookDetailOverlay" hidden>
+  <div class="book-detail" role="dialog" aria-modal="true" aria-labelledby="bookDetailTitle">
+    <button type="button" class="bd-close" id="bookDetailClose" aria-label="Close book details">&#10005;</button>
+    <div class="bd-body" id="bookDetailBody"></div>
+  </div>
+</div>
 <aside class="cart-drawer" id="cartDrawer" aria-label="Your reading list">
   <div class="cart-drawer-head">
     <div>
@@ -4043,6 +4084,120 @@
     { title:"The Great Mohadditheen & Their Contribution", urdu:"تذکرۃ المحدثین", author:"Maulana Taqi Uddin Nadvi Muzahiri", cat:"Hadith & Sunnah", meta:"Single volume · English", img:"images/book-730.jpg", bg:"#a9b8e0" },
   ];
 
+  /* DA_SEO_START — shared by this page and by build-seo.mjs (keep both markers) */
+  const DA_SEO = (function(){
+    let SITE = 'https://darulishaatglobal.com';
+    function setSite(u){ SITE = String(u).replace(/\/+$/, ''); }
+    function site(){ return SITE; }
+    function org(){
+      return { '@type':'Organization', '@id': SITE + '/#organization', name:'Darul Ishaat', url: SITE + '/' };
+    }
+    // URL-safe slug from the English title (diacritics, apostrophes and
+    // symbols removed). Duplicate titles get the cover-image number added.
+    function slugBase(t){
+      return String(t || '').toLowerCase().normalize('NFKD')
+        .replace(/[\u0300-\u036f]/g, '').replace(/['\u2018\u2019`]/g, '')
+        .replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+    }
+    function imgNum(b){
+      const m = String(b.img || '').match(/book-(\d+)/);
+      return m ? m[1] : '';
+    }
+    function slugs(list){
+      const seen = {};
+      return list.map(function(b, i){
+        let s = slugBase(b.title) || 'book';
+        if(seen[s]) s = s + '-' + (imgNum(b) || (i + 1));
+        while(seen[s]) s += '-x';
+        seen[s] = 1;
+        return s;
+      });
+    }
+    function pageUrl(slug){ return SITE + '/book/' + slug; }
+    function absImg(p){ return SITE + '/' + encodeURI(String(p || '').replace(/^\.?\//, '')); }
+    function cleanMeta(b){ return String(b.meta || '').replace(/\s+/g, ' ').trim(); }
+    function langs(b){
+      const m = String(b.meta || ''), out = [];
+      if(/urdu/i.test(m)) out.push('ur');
+      if(/arabic/i.test(m)) out.push('ar');
+      if(/english/i.test(m)) out.push('en');
+      return out;
+    }
+    // "Author A & Author B, trans. Translator" -> authors + translator
+    function parseAuthor(a){
+      const s = String(a || '').replace(/\s+/g, ' ').trim();
+      const t = s.match(/,?\s*(?:trans\.?|tr\.|translated by)\s+([^,;]+)/i);
+      let primary = s.split(/,\s*(?:trans\.?|tr\.|translated|urdu tarjuma|ta'liqat|zer-e|edited|compiled|dalail|ma')/i)[0];
+      primary = primary.replace(/^(?:compiled|edited|collected)\s+by\s+/i, '');
+      const names = primary.split(/\s+(?:&|and)\s+|\s*;\s*/).map(function(x){ return x.trim(); }).filter(Boolean);
+      return { names: names.length ? names : [s], translator: t ? t[1].trim() : '' };
+    }
+    function describe(b){
+      const a = parseAuthor(b.author).names.join(' & ');
+      return (b.title + ' by ' + a + ' \u2014 ' + b.cat + '. ' + cleanMeta(b) + '. Published by Darul Ishaat, Karachi.')
+        .replace(/\.(\s*\.)+/g, '.').replace(/\s+/g, ' ').trim();
+    }
+    function shortDesc(b, max){
+      const d = describe(b);
+      return d.length <= max ? d : d.slice(0, max - 1).replace(/\s+\S*$/, '') + '\u2026';
+    }
+    // One entity typed as both schema.org/Book and schema.org/Product.
+    function bookLd(b, slug){
+      const a = parseAuthor(b.author), url = pageUrl(slug), L = langs(b), n = imgNum(b);
+      const people = a.names.map(function(x){ return { '@type':'Person', name:x }; });
+      const o = {
+        '@type': ['Book', 'Product'],
+        '@id': url + '#book',
+        name: b.title,
+        url: url,
+        image: absImg(b.img),
+        author: people.length === 1 ? people[0] : people,
+        publisher: { '@id': SITE + '/#organization' },
+        brand: { '@type':'Brand', name:'Darul Ishaat' },
+        genre: b.cat,
+        category: b.cat,
+        description: describe(b),
+        offers: {
+          '@type':'Offer', url: url, priceCurrency:'PKR',
+          availability:'https://schema.org/InStock',
+          itemCondition:'https://schema.org/NewCondition',
+          seller: { '@id': SITE + '/#organization' }
+        }
+      };
+      if(b.urdu) o.alternateName = b.urdu;
+      if(a.translator) o.translator = { '@type':'Person', name: a.translator };
+      if(L.length) o.inLanguage = L.length === 1 ? L[0] : L;
+      if(n) o.sku = 'DI-' + n;
+      return o;
+    }
+    function itemList(list, slugArr){
+      return {
+        '@type':'ItemList', '@id': SITE + '/#catalogue',
+        name:'Darul Ishaat book catalogue', numberOfItems: list.length,
+        itemListElement: list.map(function(b, i){
+          return { '@type':'ListItem', position: i + 1, item: bookLd(b, slugArr[i]) };
+        })
+      };
+    }
+    function bookPageGraph(b, slug){
+      return {
+        '@context':'https://schema.org',
+        '@graph': [
+          bookLd(b, slug),
+          { '@type':'BreadcrumbList', itemListElement: [
+            { '@type':'ListItem', position:1, name:'Darul Ishaat', item: SITE + '/' },
+            { '@type':'ListItem', position:2, name: b.title, item: pageUrl(slug) }
+          ] }
+        ]
+      };
+    }
+    return { setSite:setSite, site:site, org:org, slugBase:slugBase, imgNum:imgNum, slugs:slugs,
+             pageUrl:pageUrl, absImg:absImg, cleanMeta:cleanMeta, langs:langs, parseAuthor:parseAuthor,
+             describe:describe, shortDesc:shortDesc, bookLd:bookLd, itemList:itemList, bookPageGraph:bookPageGraph };
+  })();
+  /* DA_SEO_END */
+
+
   // Defensive guard: CATALOGUE is a literal array above, but if a future
   // edit ever turns it into something else (or a merge conflict corrupts
   // it), fail loudly in the console and fall back to an empty catalogue
@@ -4467,6 +4622,17 @@
     return IMPORTED_URDU_TITLES.has(b?.title);
   }
 
+  // id -> "/book/<slug>" (same slugs as the share pages and sitemap).
+  let _bookPathById = null;
+  function bookHref(id){
+    if(!_bookPathById){
+      _bookPathById = {};
+      const sl = DA_SEO.slugs(CATALOGUE);
+      CATALOGUE.forEach((bk, i) => { _bookPathById[bk.id] = '/book/' + sl[i]; });
+    }
+    return _bookPathById[id] || '#';
+  }
+
   function bookCardHTML(b){
     // Defensive: never let one malformed book entry break the whole grid.
     // Missing fields fall back to safe defaults instead of throwing.
@@ -4521,7 +4687,7 @@
               ${b?.fourColor ? `<span class="four-color-badge"><svg viewBox="0 0 16 16" width="12" height="12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="6" cy="6" r="4.4" fill="currentColor" opacity="0.55"/><circle cx="10.5" cy="6" r="4.4" fill="currentColor" opacity="0.55"/><circle cx="8.25" cy="10" r="4.4" fill="currentColor" opacity="0.55"/></svg> 4-Color Printing</span>` : ''}
               ${importedPaper ? `<span class="imported-paper-badge">📄 Imported Paper</span>` : ''}
             </div>
-            <h3>${title}</h3>
+            <h3><a class="book-link" href="${bookHref(id)}" data-book-id="${id}">${title}</a></h3>
             ${urdu ? `<div class="ur-name">${urdu}</div>` : ''}
             <div class="author">${authorLinesHTML(author)}</div>
           </div>
@@ -5191,118 +5357,6 @@
   });
   renderCatalogue();
 
-  /* DA_SEO_START — shared by this page and by build-seo.mjs (keep both markers) */
-  const DA_SEO = (function(){
-    let SITE = 'https://darulishaatglobal.com';
-    function setSite(u){ SITE = String(u).replace(/\/+$/, ''); }
-    function site(){ return SITE; }
-    function org(){
-      return { '@type':'Organization', '@id': SITE + '/#organization', name:'Darul Ishaat', url: SITE + '/' };
-    }
-    // URL-safe slug from the English title (diacritics, apostrophes and
-    // symbols removed). Duplicate titles get the cover-image number added.
-    function slugBase(t){
-      return String(t || '').toLowerCase().normalize('NFKD')
-        .replace(/[\u0300-\u036f]/g, '').replace(/['\u2018\u2019`]/g, '')
-        .replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-    }
-    function imgNum(b){
-      const m = String(b.img || '').match(/book-(\d+)/);
-      return m ? m[1] : '';
-    }
-    function slugs(list){
-      const seen = {};
-      return list.map(function(b, i){
-        let s = slugBase(b.title) || 'book';
-        if(seen[s]) s = s + '-' + (imgNum(b) || (i + 1));
-        while(seen[s]) s += '-x';
-        seen[s] = 1;
-        return s;
-      });
-    }
-    function pageUrl(slug){ return SITE + '/book/' + slug; }
-    function absImg(p){ return SITE + '/' + encodeURI(String(p || '').replace(/^\.?\//, '')); }
-    function cleanMeta(b){ return String(b.meta || '').replace(/\s+/g, ' ').trim(); }
-    function langs(b){
-      const m = String(b.meta || ''), out = [];
-      if(/urdu/i.test(m)) out.push('ur');
-      if(/arabic/i.test(m)) out.push('ar');
-      if(/english/i.test(m)) out.push('en');
-      return out;
-    }
-    // "Author A & Author B, trans. Translator" -> authors + translator
-    function parseAuthor(a){
-      const s = String(a || '').replace(/\s+/g, ' ').trim();
-      const t = s.match(/,?\s*(?:trans\.?|tr\.|translated by)\s+([^,;]+)/i);
-      let primary = s.split(/,\s*(?:trans\.?|tr\.|translated|urdu tarjuma|ta'liqat|zer-e|edited|compiled|dalail|ma')/i)[0];
-      primary = primary.replace(/^(?:compiled|edited|collected)\s+by\s+/i, '');
-      const names = primary.split(/\s+(?:&|and)\s+|\s*;\s*/).map(function(x){ return x.trim(); }).filter(Boolean);
-      return { names: names.length ? names : [s], translator: t ? t[1].trim() : '' };
-    }
-    function describe(b){
-      const a = parseAuthor(b.author).names.join(' & ');
-      return (b.title + ' by ' + a + ' \u2014 ' + b.cat + '. ' + cleanMeta(b) + '. Published by Darul Ishaat, Karachi.')
-        .replace(/\.(\s*\.)+/g, '.').replace(/\s+/g, ' ').trim();
-    }
-    function shortDesc(b, max){
-      const d = describe(b);
-      return d.length <= max ? d : d.slice(0, max - 1).replace(/\s+\S*$/, '') + '\u2026';
-    }
-    // One entity typed as both schema.org/Book and schema.org/Product.
-    function bookLd(b, slug){
-      const a = parseAuthor(b.author), url = pageUrl(slug), L = langs(b), n = imgNum(b);
-      const people = a.names.map(function(x){ return { '@type':'Person', name:x }; });
-      const o = {
-        '@type': ['Book', 'Product'],
-        '@id': url + '#book',
-        name: b.title,
-        url: url,
-        image: absImg(b.img),
-        author: people.length === 1 ? people[0] : people,
-        publisher: { '@id': SITE + '/#organization' },
-        brand: { '@type':'Brand', name:'Darul Ishaat' },
-        genre: b.cat,
-        category: b.cat,
-        description: describe(b),
-        offers: {
-          '@type':'Offer', url: url, priceCurrency:'PKR',
-          availability:'https://schema.org/InStock',
-          itemCondition:'https://schema.org/NewCondition',
-          seller: { '@id': SITE + '/#organization' }
-        }
-      };
-      if(b.urdu) o.alternateName = b.urdu;
-      if(a.translator) o.translator = { '@type':'Person', name: a.translator };
-      if(L.length) o.inLanguage = L.length === 1 ? L[0] : L;
-      if(n) o.sku = 'DI-' + n;
-      return o;
-    }
-    function itemList(list, slugArr){
-      return {
-        '@type':'ItemList', '@id': SITE + '/#catalogue',
-        name:'Darul Ishaat book catalogue', numberOfItems: list.length,
-        itemListElement: list.map(function(b, i){
-          return { '@type':'ListItem', position: i + 1, item: bookLd(b, slugArr[i]) };
-        })
-      };
-    }
-    function bookPageGraph(b, slug){
-      return {
-        '@context':'https://schema.org',
-        '@graph': [
-          bookLd(b, slug),
-          { '@type':'BreadcrumbList', itemListElement: [
-            { '@type':'ListItem', position:1, name:'Darul Ishaat', item: SITE + '/' },
-            { '@type':'ListItem', position:2, name: b.title, item: pageUrl(slug) }
-          ] }
-        ]
-      };
-    }
-    return { setSite:setSite, site:site, org:org, slugBase:slugBase, imgNum:imgNum, slugs:slugs,
-             pageUrl:pageUrl, absImg:absImg, cleanMeta:cleanMeta, langs:langs, parseAuthor:parseAuthor,
-             describe:describe, shortDesc:shortDesc, bookLd:bookLd, itemList:itemList, bookPageGraph:bookPageGraph };
-  })();
-  /* DA_SEO_END */
 
   // ── SEO: dynamic Schema.org JSON-LD (Book + Product) built from the
   // catalogue array above. Added once the browser is idle so it never
@@ -5352,6 +5406,130 @@
         }, 500);
       }
     }catch(err){}
+  })();
+
+  // ── Book detail popup + address bar. Opening a book pushes /book/<slug>
+  // (history.pushState) so copying the URL gives the exact book link; Back,
+  // Forward, Esc, the ✕ button and a tap outside all keep the URL in sync.
+  (function(){
+    const overlay = document.getElementById('bookDetailOverlay');
+    const body = document.getElementById('bookDetailBody');
+    const closeBtn = document.getElementById('bookDetailClose');
+    if(!overlay || !body) return;
+    const baseTitle = document.title;
+    const slugs = DA_SEO.slugs(CATALOGUE);
+    const idxBySlug = new Map(slugs.map((s, i) => [s, i]));
+    let openSlug = null, startedHere = false, lastFocus = null;
+
+    const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+    function render(b, slug){
+      const url = location.origin + '/book/' + slug;
+      const wa = 'https://wa.me/?text=' + encodeURIComponent(b.title + ' \u2014 Darul Ishaat\n' + url);
+      body.innerHTML = `
+        <div class="bd-cover">${b.img ? `<img src="${esc(b.img)}" alt="Cover of ${esc(b.title)}">` : ''}</div>
+        <div class="bd-info">
+          <h2 id="bookDetailTitle">${esc(b.title)}</h2>
+          ${b.urdu ? `<div class="bd-urdu" dir="rtl" lang="ur">${esc(b.urdu)}</div>` : ''}
+          <div class="bd-author">${authorLinesHTML(b.author || '')}</div>
+          <div class="bd-tags">
+            <span class="tag">${esc(b.cat)}</span>
+            ${b.twoColor ? '<span class="two-color-badge">\u2728 2-Color Printing</span>' : ''}
+            ${isImportedPaper(b) ? '<span class="imported-paper-badge">\ud83d\udcc4 Imported Paper</span>' : ''}
+          </div>
+          <p class="bd-meta">${esc(b.meta)}</p>
+          <div class="cart-controls" data-id="${b.id}">${cartControlsHTML(b.id)}</div>
+          <div class="bd-actions">
+            <button type="button" class="btn btn-outline" id="bdCopy">Copy link</button>
+            <a class="btn btn-outline" href="${wa}" target="_blank" rel="noopener">Share on WhatsApp</a>
+          </div>
+        </div>`;
+    }
+
+    function show(i, mode){
+      const b = CATALOGUE[i], slug = slugs[i];
+      if(!b) return;
+      if(!openSlug) lastFocus = document.activeElement;
+      render(b, slug);
+      overlay.hidden = false;
+      document.body.style.overflow = 'hidden';
+      document.title = b.title + ' \u2014 Darul Ishaat';
+      const path = '/book/' + slug;
+      try{
+        if(mode === 'push'){ history.pushState({ daBook: slug }, '', path); startedHere = true; }
+        else if(mode === 'init'){ history.replaceState({ daBook: slug }, '', path); startedHere = false; }
+      }catch(err){ /* file:// or sandboxed preview: popup still works */ }
+      openSlug = slug;
+      closeBtn.focus({ preventScroll: true });
+      try{ trackEvent('book_view', { item_id: b.id, item_name: b.title, item_category: b.cat }); }catch(err){}
+    }
+
+    function hide(){
+      overlay.hidden = true;
+      document.body.style.overflow = '';
+      document.title = baseTitle;
+      openSlug = null;
+      if(lastFocus && lastFocus.focus){ try{ lastFocus.focus({ preventScroll: true }); }catch(err){} }
+    }
+
+    function close(){
+      if(!openSlug) return;
+      let st = null; try{ st = history.state; }catch(err){}
+      if(st && st.daBook && startedHere){ history.back(); return; }   // popstate hides it
+      hide();
+      try{
+        if(/^\/book\//.test(location.pathname)) history.replaceState(null, '', '/' + location.search);
+      }catch(err){}
+    }
+
+    // Open from the grid: the title link, or any non-interactive part of a card.
+    document.addEventListener('click', function(e){
+      if(e.defaultPrevented) return;
+      const a = e.target.closest('a.book-link');
+      if(a && (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0)) return;  // new-tab clicks keep working
+      let card = null;
+      if(a) card = a.closest('.book-card');
+      else if(!e.target.closest('button, a, input, select, textarea, .cart-controls')) card = e.target.closest('.book-card');
+      if(!card) return;
+      const id = Number(card.dataset.bookId);
+      const i = CATALOGUE.findIndex(b => b.id === id);
+      if(i < 0) return;
+      e.preventDefault();
+      show(i, 'push');
+    });
+
+    overlay.addEventListener('click', function(e){ if(e.target === overlay) close(); });
+    closeBtn.addEventListener('click', close);
+    document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && openSlug) close(); });
+
+    body.addEventListener('click', function(e){
+      const copy = e.target.closest('#bdCopy');
+      if(!copy) return;
+      const url = location.origin + '/book/' + openSlug;
+      const done = () => { copy.textContent = 'Link copied \u2713'; setTimeout(() => { copy.textContent = 'Copy link'; }, 1800); };
+      if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, () => window.prompt('Copy this link:', url));
+      else window.prompt('Copy this link:', url);
+    });
+
+    // Back / Forward
+    window.addEventListener('popstate', function(e){
+      const s = e.state && e.state.daBook;
+      const i = s ? idxBySlug.get(s) : undefined;
+      if(i !== undefined) show(i, 'pop'); else if(openSlug) hide();
+    });
+
+    // Landing directly on /book/<slug> (e.g. a host that serves this page for
+    // every path) opens that book straight away.
+    const m = location.pathname.match(/^\/book\/([^\/]+)\/?$/);
+    if(m && idxBySlug.has(decodeURIComponent(m[1]))) show(idxBySlug.get(decodeURIComponent(m[1])), 'init');
+    else {
+      // "View in catalogue" on a book's share page lands on /?book=<slug>:
+      // open that book's details and show its /book/<slug> address.
+      try{
+        const qb = new URLSearchParams(location.search).get('book');
+        if(qb && idxBySlug.has(qb)) show(idxBySlug.get(qb), 'init');
+      }catch(err){}
+    }
   })();
 
   // The founder section photo reuses the same embedded image already
