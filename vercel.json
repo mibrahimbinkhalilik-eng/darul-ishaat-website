@@ -1,10 +1,43 @@
 {
   "functions": {
-    "api/seo.js": { "includeFiles": "index.html" }
+    "api/seo.js": {
+      "includeFiles": "index.html"
+    }
   },
   "rewrites": [
-    { "source": "/book/:slug", "destination": "/api/seo?slug=:slug" },
-    { "source": "/book/:slug/", "destination": "/api/seo?slug=:slug" },
-    { "source": "/sitemap.xml", "destination": "/api/seo?sitemap=1" }
+    {
+      "source": "/book/:slug",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*([Bb]ot[/;\\-)]|[Bb]ot$|[Cc]rawl|[Ss]pider|facebookexternalhit|Facebot|WhatsApp|Pinterest|Embedly|Iframely|vkShare|SkypeUriPreview|Viber|Bluesky|Mastodon|Google-|GoogleOther|Mediapartners|meta-external|Applebot|[Ii]nspectionTool).*"
+        }
+      ],
+      "destination": "/api/seo?slug=:slug"
+    },
+    {
+      "source": "/book/:slug/",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*([Bb]ot[/;\\-)]|[Bb]ot$|[Cc]rawl|[Ss]pider|facebookexternalhit|Facebot|WhatsApp|Pinterest|Embedly|Iframely|vkShare|SkypeUriPreview|Viber|Bluesky|Mastodon|Google-|GoogleOther|Mediapartners|meta-external|Applebot|[Ii]nspectionTool).*"
+        }
+      ],
+      "destination": "/api/seo?slug=:slug"
+    },
+    {
+      "source": "/book/:slug",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/book/:slug/",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/sitemap.xml",
+      "destination": "/api/seo?sitemap=1"
+    }
   ]
 }
