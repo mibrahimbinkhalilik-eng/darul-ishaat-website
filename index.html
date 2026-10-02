@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Pages are also served at /book/<slug>; a root base keeps images/, icons/, manifest and sw.js resolving from the site root there. -->
+<base href="/">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
@@ -5531,6 +5533,19 @@
       }catch(err){}
     }
   })();
+
+  // In-page links (#catalogue, #about, ...) keep scrolling in place when the
+  // page is open at /book/<slug>; without this the root <base> would send them
+  // to "/#...", reloading the home page and closing the book popup.
+  document.addEventListener('click', function(e){
+    if(e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+    const a = e.target.closest && e.target.closest('a[href^="#"]');
+    if(!a || location.pathname === '/') return;
+    const id = decodeURIComponent(a.getAttribute('href').slice(1));
+    if(!id){ e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+    const t = document.getElementById(id);
+    if(t){ e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  });
 
   // The founder section photo reuses the same embedded image already
   // present in the hero avatar above it, instead of storing the photo
