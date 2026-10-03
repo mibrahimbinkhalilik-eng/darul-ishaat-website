@@ -9,7 +9,7 @@
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
 <!-- Umami analytics -->
-<script defer src="https://cloud.umami.is/script.js" data-website-id="f8b9212a-1c36-46e3-8d92-ef366fe80f06"></script>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="c996d746-0e03-404e-a6be-8e81f82cc30e"></script>
 <title>Darul Ishaat — Publishers of Islamic Books, Karachi, Est. 1950</title>
 <meta name="description" content="Darul Ishaat, Karachi — publishers, booksellers and exporters of the Holy Quran and authentic Islamic literature since 1950. Browse 1000+ books in Urdu, English and Arabic and order on WhatsApp.">
 <meta name="robots" content="index, follow, max-image-preview:large">
@@ -107,7 +107,7 @@
     e.preventDefault();
     window.daInstallPrompt = e;
     window.dispatchEvent(new Event('da:can-install'));
-    daTrackEarly('pwa_install_eligible', { platform: 'android' });
+    // daTrackEarly('pwa_install_eligible', { platform: 'android' }); // pruned: high-frequency, saves Umami quota
   });
   window.addEventListener('appinstalled', () => {
     window.daInstallPrompt = null;
@@ -3321,7 +3321,7 @@
     </div>
     <p class="fine">DARUL ISHAAT · KARACHI · EST. 1950</p>
     <div style="text-align:center;">
-      <a class="analytics-link" id="analyticsLink" href="https://cloud.umami.is/websites/f8b9212a-1c36-46e3-8d92-ef366fe80f06" target="_blank" rel="noopener" aria-label="View live analytics on Umami">
+      <a class="analytics-link" id="analyticsLink" href="https://cloud.umami.is/websites/c996d746-0e03-404e-a6be-8e81f82cc30e" target="_blank" rel="noopener" aria-label="View live analytics on Umami">
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M4 20V10M11 20V4M18 20v-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
         Live Analytics
         <span class="live-dot" aria-hidden="true"></span>
@@ -5282,7 +5282,7 @@
           // get destroyed and re-decoded on every click.
           const filtered = getFilteredBooks();
           const prevCount = visibleCount;
-          trackEvent('load_more_click', { filter: activeFilter, shown_before: prevCount });
+          // trackEvent('load_more_click', { filter: activeFilter, shown_before: prevCount }); // pruned: saves Umami quota
           visibleCount += 12;
           const newSlice = filtered.slice(prevCount, visibleCount);
           cardGrid.insertAdjacentHTML('beforeend', newSlice.map(bookCardHTML).join(''));
@@ -5345,13 +5345,8 @@
           const book = CATALOGUE.find(b => b.id === id);
           if(book){
             filterViewCount++;
-            trackEvent('view_item', {
-              item_id: id,
-              item_name: book.title,
-              item_category: book.cat,
-              active_filter: activeFilter,
-              items: [{ item_id: String(id), item_name: book.title, item_category: book.cat }]
-            });
+            // trackEvent('view_item', {...}) pruned: high-frequency, saves Umami quota.
+            // filterViewCount++ above is kept, so category_browse_depth still works.
           }
         });
       }, { threshold: 0.5 });
@@ -6824,7 +6819,7 @@
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then((reg) => {
-        trackEvent('pwa_sw_registered');
+        // trackEvent('pwa_sw_registered'); // pruned: saves Umami quota
         // Check for a new deploy every time the page loads...
         reg.update().catch(() => {});
         // ...periodically while the tab stays open...
