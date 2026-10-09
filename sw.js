@@ -1,4 +1,4 @@
-const CACHE_NAME = "darul-ishaat-v7";
+const CACHE_NAME = "darul-ishaat-v8";
 const CORE_ASSETS = [
   "./",
   "./index.html",
